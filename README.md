@@ -2,11 +2,14 @@
 
 [![PyPI version](https://img.shields.io/pypi/v/grata.svg)](https://pypi.org/project/grata/)
 
-The Grata Python library provides convenient access to the Grata REST API from any Python 3.8+
+The unofficial Grata Python library provides convenient access to the Grata REST API from any Python 3.8+
 application. The library includes type definitions for all request params and response fields,
 and offers both synchronous and asynchronous clients powered by [httpx](https://github.com/encode/httpx).
 
 It is generated with [Stainless](https://www.stainlessapi.com/).
+
+> [!IMPORTANT]
+> This library is managed by [TJC L.P.](https://tjclp.com/) and is not affilliated with [Grata](https://grata.com)
 
 ## Documentation
 
