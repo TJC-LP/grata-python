@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
-from typing_extensions import TypedDict
+from typing_extensions import Required, TypedDict
 
 __all__ = ["ListCreateParams"]
 
 
 class ListCreateParams(TypedDict, total=False):
-    name: str
-    """Name of list being created"""
+    name: Required[str]
+    """Name of the list being created."""

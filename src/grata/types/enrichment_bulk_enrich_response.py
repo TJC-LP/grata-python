@@ -1,92 +1,100 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import List, Optional
-from typing_extensions import Literal
+from typing import List, Union, Optional
+from datetime import date
+from typing_extensions import Literal, TypeAlias
 
+from .owner import Owner
 from .._models import BaseModel
 
 __all__ = [
-    "CompanyDetailed",
-    "Classifications",
-    "ClassificationsIndustryClassification",
-    "ClassificationsSoftwareIndustry",
-    "Conferences",
-    "ConferencesConference",
-    "Contacts",
-    "ContactsContact",
-    "Domain",
-    "EmployeeLocationBreakdown",
-    "EmployeesGrowth",
-    "Investor",
-    "Locations",
-    "LocationsLocation",
-    "LocationsLocationGreaterRegion",
-    "Owner",
-    "UltimateOwner",
+    "EnrichmentBulkEnrichResponse",
+    "Company",
+    "CompanyClassifications",
+    "CompanyClassificationsIndustryClassification",
+    "CompanyClassificationsSoftwareIndustry",
+    "CompanyConferences",
+    "CompanyConferencesConference",
+    "CompanyContacts",
+    "CompanyContactsContact",
+    "CompanyDomain",
+    "CompanyEmployeeLocationBreakdown",
+    "CompanyEmployeesGrowth",
+    "CompanyInvestors",
+    "CompanyInvestorsInvestors",
+    "CompanyLocations",
+    "CompanyLocationsLocation",
+    "CompanyLocationsLocationGreaterRegion",
 ]
 
 
-class ClassificationsIndustryClassification(BaseModel):
-    industry_code: Optional[str] = None
-    """Industry code"""
+class CompanyClassificationsIndustryClassification(BaseModel):
+    industry_code: str
+    """Industry code."""
 
-    industry_name: Optional[str] = None
-    """Industry name"""
-
-
-class ClassificationsSoftwareIndustry(BaseModel):
-    industry_code: Optional[str] = None
-    """Software industry code"""
-
-    industry_name: Optional[str] = None
-    """Software industry name"""
+    industry_name: str
+    """Industry name."""
 
 
-class Classifications(BaseModel):
-    industry_classifications: Optional[List[ClassificationsIndustryClassification]] = None
-    """Industry classifications for the company"""
+class CompanyClassificationsSoftwareIndustry(BaseModel):
+    industry_code: str
+    """Software industry code."""
 
-    software_industries: Optional[List[ClassificationsSoftwareIndustry]] = None
-    """Software industry classification for the company"""
+    industry_name: str
+    """Software industry name."""
 
 
-class ConferencesConference(BaseModel):
-    company_count: Optional[int] = None
+class CompanyClassifications(BaseModel):
+    industry_classifications: List[CompanyClassificationsIndustryClassification]
+    """Industry classifications for the company."""
+
+    software_industries: List[CompanyClassificationsSoftwareIndustry]
+    """Software industry classifications for the company."""
+
+
+class CompanyConferencesConference(BaseModel):
+    company_count: int
     """Total count of companies attending the conference."""
 
-    end_date: Optional[str] = None
+    end_date: date
     """End date of the conference (YYYY-MM-DD)."""
 
-    location: Optional[str] = None
+    location: str
     """Location of the conference."""
 
-    name: Optional[str] = None
+    name: str
     """Name of the conference."""
 
-    start_date: Optional[str] = None
+    start_date: date
     """Start date of the conference (YYYY-MM-DD)."""
 
-    url: Optional[str] = None
+    url: str
     """Link to the conference."""
 
 
-class Conferences(BaseModel):
-    conferences: Optional[List[ConferencesConference]] = None
+class CompanyConferences(BaseModel):
+    conferences: List[CompanyConferencesConference]
     """List of conferences."""
 
-    count: Optional[int] = None
+    count: int
     """Total count of all conferences."""
 
 
-class ContactsContact(BaseModel):
+class CompanyContactsContact(BaseModel):
+    name: str
+    """Name of the contact."""
+
+    title: str
+    """Title of the contact."""
+
+    work_email: str
+    """Work email of the contact."""
+
     age: Optional[int] = None
     """Age of contact."""
 
     email_deliverability: Optional[str] = None
     """Email Deliverability of the contact's email."""
-
-    name: Optional[str] = None
-    """Name of the contact."""
 
     socials_facebook: Optional[str] = None
     """Link to the contact's Facebook page."""
@@ -97,97 +105,92 @@ class ContactsContact(BaseModel):
     socials_twitter: Optional[str] = None
     """Link to the contact's Twitter page."""
 
-    title: Optional[str] = None
-    """Title of the contact."""
 
-    work_email: Optional[str] = None
-    """Work email of the contact."""
-
-
-class Contacts(BaseModel):
-    contacts: Optional[List[ContactsContact]] = None
+class CompanyContacts(BaseModel):
+    contacts: List[CompanyContactsContact]
     """List of contacts."""
 
-    count: Optional[int] = None
+    count: int
     """Total count of all contacts."""
 
 
-class Domain(BaseModel):
-    domain: Optional[str] = None
+class CompanyDomain(BaseModel):
+    domain: str
     """Domain of a company."""
 
-    domain_type: Optional[
-        Literal[
-            "Primary",
-            "Product",
-            "Business unit",
-            "Redirect",
-            "Foreign language",
-            "Corporate",
-            "Blog",
-            "Blacklisted domain",
-            "Secondary",
-        ]
-    ] = None
+    domain_type: Literal[
+        "Primary",
+        "Product",
+        "Business unit",
+        "Redirect",
+        "Foreign language",
+        "Corporate",
+        "Blog",
+        "Blacklisted domain",
+        "Secondary",
+    ]
     """The type of domain."""
 
-    status: Optional[float] = None
+    status: float
     """Indicates if this domain is active.
 
     0 indicates an active domain, 1 indicates an inactive domain.
     """
 
 
-class EmployeeLocationBreakdown(BaseModel):
-    confidence: Optional[str] = None
-    """Confidence score of the prediction"""
+class CompanyEmployeeLocationBreakdown(BaseModel):
+    confidence: str
+    """Confidence score of the prediction."""
 
-    country: Optional[str] = None
-    """Country where the employees are located"""
+    country: str
+    """Country where the employees are located."""
 
-    country_percentage: Optional[float] = None
-    """Percentage of the employees located in the specified country"""
+    country_percentage: float
+    """Percentage of the employees located in the specified country."""
 
 
-class EmployeesGrowth(BaseModel):
-    percentage_one_month: Optional[float] = None
+class CompanyEmployeesGrowth(BaseModel):
+    percentage_one_month: float
     """1 month growth rate as a percentage."""
 
-    percentage_one_year: Optional[float] = None
+    percentage_one_year: float
     """Annual growth rate as a percentage."""
 
-    percentage_six_month: Optional[float] = None
+    percentage_six_month: float
     """6 month growth rate as a percentage."""
 
-    percentage_three_month: Optional[float] = None
+    percentage_three_month: float
     """3 month growth rate as a percentage."""
 
 
-class Investor(BaseModel):
-    id: Optional[str] = None
+class CompanyInvestorsInvestors(BaseModel):
+    id: str
     """Platform ID for the investor."""
 
-    domain: Optional[str] = None
+    domain: str
     """Domain of the investor."""
 
-    name: Optional[str] = None
+    name: str
     """Name of the investor."""
 
 
-class LocationsLocationGreaterRegion(BaseModel):
+CompanyInvestors: TypeAlias = Union[str, CompanyInvestorsInvestors]
+
+
+class CompanyLocationsLocationGreaterRegion(BaseModel):
     name: Optional[str] = None
     """Name of the greater region."""
 
 
-class LocationsLocation(BaseModel):
-    city_name: Optional[str] = None
+class CompanyLocationsLocation(BaseModel):
+    city_name: str
     """Name of the city of the location."""
+
+    country_iso2: str
+    """Two-digit country abbreviation."""
 
     continent_name: Optional[str] = None
     """Name of the continent of the location."""
-
-    country_iso2: Optional[str] = None
-    """Two-digit country abbreviation."""
 
     country_iso3: Optional[str] = None
     """Three-digit country abbreviation."""
@@ -195,7 +198,7 @@ class LocationsLocation(BaseModel):
     country_name: Optional[str] = None
     """Name of the country for the location."""
 
-    greater_regions: Optional[List[LocationsLocationGreaterRegion]] = None
+    greater_regions: Optional[List[CompanyLocationsLocationGreaterRegion]] = None
     """List of the greater regions encompassing the location."""
 
     house_number: Optional[str] = None
@@ -232,43 +235,24 @@ class LocationsLocation(BaseModel):
     """Street name of the location."""
 
 
-class Locations(BaseModel):
-    locations: Optional[List[LocationsLocation]] = None
+class CompanyLocations(BaseModel):
+    locations: List[CompanyLocationsLocation]
     """List of locations."""
 
-    total: Optional[int] = None
+    total: int
     """Total count of all locations of business for the Company"""
 
 
-class Owner(BaseModel):
-    id: Optional[str] = None
-    """Platform ID for the owner."""
+class Company(BaseModel):
+    company_uid: str
+    """Unique alphanumeric Grata ID for the company (case-sensitive)."""
 
-    domain: Optional[str] = None
-    """Domain of the owner."""
+    input: str
+    """The inputted domain or company_uid."""
 
-    name: Optional[str] = None
-    """Name of the owner."""
+    name: str
+    """Name of the company."""
 
-    status: Optional[str] = None
-    """Platform status of the owner."""
-
-
-class UltimateOwner(BaseModel):
-    id: Optional[str] = None
-    """Platform ID for the ultimate owner."""
-
-    domain: Optional[str] = None
-    """Domain of the ultimate owner."""
-
-    name: Optional[str] = None
-    """Name of the ultimate owner."""
-
-    status: Optional[str] = None
-    """Platform status of the ultimate owner."""
-
-
-class CompanyDetailed(BaseModel):
     business_models: Optional[
         List[
             Literal[
@@ -300,17 +284,14 @@ class CompanyDetailed(BaseModel):
     ] = None
     """Method of product or service delivery."""
 
-    classifications: Optional[Classifications] = None
-    """Classifications for the company"""
+    classifications: Optional[CompanyClassifications] = None
+    """Classifications for the company."""
 
-    company_uid: Optional[str] = None
-    """Unique alphanumeric Grata ID for the company (case-sensitive)."""
+    conferences: Optional[CompanyConferences] = None
+    """Conferences the company has or will attend."""
 
-    conferences: Optional[Conferences] = None
-    """Conferences the company has or will attend"""
-
-    contacts: Optional[Contacts] = None
-    """Contacts for the company"""
+    contacts: Optional[CompanyContacts] = None
+    """Contacts for the company."""
 
     description: Optional[str] = None
     """Short description of the company."""
@@ -318,16 +299,16 @@ class CompanyDetailed(BaseModel):
     domain: Optional[str] = None
     """Domain of the company."""
 
-    domains: Optional[List[Domain]] = None
+    domains: Optional[List[CompanyDomain]] = None
     """Associated domains for the company.
 
     Includes foreign domains, secondary domains, and redirects.
     """
 
-    employee_location_breakdown: Optional[List[EmployeeLocationBreakdown]] = None
+    employee_location_breakdown: Optional[List[CompanyEmployeeLocationBreakdown]] = None
     """Location breakdown of the employees by country"""
 
-    employees_growth: Optional[EmployeesGrowth] = None
+    employees_growth: Optional[CompanyEmployeesGrowth] = None
     """Employee growth rate as a percentage."""
 
     employees_on_professional_networks: Optional[int] = None
@@ -392,7 +373,7 @@ class CompanyDetailed(BaseModel):
     headquarters: Optional[str] = None
     """City and region of headquarters."""
 
-    investors: Optional[List[Investor]] = None
+    investors: Optional[CompanyInvestors] = None
     """Investors of the company."""
 
     is_active: Optional[str] = None
@@ -404,17 +385,14 @@ class CompanyDetailed(BaseModel):
     latest_funding_amount: Optional[float] = None
     """The last funding amount received."""
 
-    latest_funding_date: Optional[str] = None
+    latest_funding_date: Optional[date] = None
     """The date of the last funding round."""
 
     latest_funding_round: Optional[str] = None
     """The type of the last funding round."""
 
-    locations: Optional[Locations] = None
+    locations: Optional[CompanyLocations] = None
     """Locations of business."""
-
-    name: Optional[str] = None
-    """Name of the company."""
 
     organization_type: Optional[
         Literal[
@@ -430,7 +408,7 @@ class CompanyDetailed(BaseModel):
     """The type of organization."""
 
     owner: Optional[Owner] = None
-    """Direct owner of the company."""
+    """Owner information."""
 
     ownership_status: Optional[
         Literal[
@@ -486,11 +464,14 @@ class CompanyDetailed(BaseModel):
     ] = None
     """Ultimate owner company type."""
 
-    ultimate_owner: Optional[UltimateOwner] = None
-    """Ultimate beneficiary of the company."""
-
-    url: Optional[str] = None
-    """URL to the company's Grata profile."""
+    ultimate_owner: Optional[Owner] = None
+    """Owner information."""
 
     year_founded: Optional[int] = None
     """Founding year of the company."""
+
+
+class EnrichmentBulkEnrichResponse(BaseModel):
+    companies: Optional[List[Company]] = None
+
+    errors: Optional[List[str]] = None

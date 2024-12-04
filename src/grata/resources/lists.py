@@ -2,42 +2,34 @@
 
 from __future__ import annotations
 
+from typing import List as TypingList
+from typing_extensions import Literal
+
 import httpx
 
-from ...types import list_list_params, list_create_params, list_update_params
-from ..._types import NOT_GIVEN, Body, Query, Headers, NoneType, NotGiven
-from ..._utils import (
+from ..types import list_list_params, list_create_params, list_update_params, list_companies_params
+from .._types import NOT_GIVEN, Body, Query, Headers, NoneType, NotGiven
+from .._utils import (
     maybe_transform,
     async_maybe_transform,
 )
-from ..._compat import cached_property
-from .companies import (
-    CompaniesResource,
-    AsyncCompaniesResource,
-    CompaniesResourceWithRawResponse,
-    AsyncCompaniesResourceWithRawResponse,
-    CompaniesResourceWithStreamingResponse,
-    AsyncCompaniesResourceWithStreamingResponse,
-)
-from ..._resource import SyncAPIResource, AsyncAPIResource
-from ..._response import (
+from .._compat import cached_property
+from .._resource import SyncAPIResource, AsyncAPIResource
+from .._response import (
     to_raw_response_wrapper,
     to_streamed_response_wrapper,
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from ..._base_client import make_request_options
-from ...types.list_response import ListResponse
-from ...types.list_search_response import ListSearchResponse
+from ..types.list import List as TypesList
+from .._base_client import make_request_options
+from ..types.list_list_response import ListListResponse
+from ..types.list_companies_response import ListCompaniesResponse
 
 __all__ = ["ListsResource", "AsyncListsResource"]
 
 
 class ListsResource(SyncAPIResource):
-    @cached_property
-    def companies(self) -> CompaniesResource:
-        return CompaniesResource(self._client)
-
     @cached_property
     def with_raw_response(self) -> ListsResourceWithRawResponse:
         """
@@ -60,22 +52,21 @@ class ListsResource(SyncAPIResource):
     def create(
         self,
         *,
-        name: str | NotGiven = NOT_GIVEN,
+        name: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> ListResponse:
-        """The create call will allow users to create a list in Grata.
+    ) -> TypesList:
+        """Create a list in Grata.
 
-        The list visibility
-        will be set to organization and it will be visible in the Grata UI for all users
-        within the account to view.
+        The list visibility will be set to organization and it
+        will be visible in the Grata UI for all users within the account to view.
 
         Args:
-          name: Name of list being created
+          name: Name of the list being created.
 
           extra_headers: Send extra headers
 
@@ -91,7 +82,7 @@ class ListsResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=ListResponse,
+            cast_to=TypesList,
         )
 
     def retrieve(
@@ -104,10 +95,10 @@ class ListsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> ListResponse:
+    ) -> TypesList:
         """
-        Grata's List Details API returns key data points about a list, including the
-        UID, created date, last updated date, and count of companies in the list.
+        Returns key data points about a list, including the UID, created date, last
+        updated date, and count of companies in the list.
 
         Args:
           extra_headers: Send extra headers
@@ -125,28 +116,26 @@ class ListsResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=ListResponse,
+            cast_to=TypesList,
         )
 
     def update(
         self,
         list_uid: str,
         *,
-        name: str | NotGiven = NOT_GIVEN,
+        name: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> ListResponse:
-        """Grata's Update List Name API enables you to update the name of a list.
-
-        Private
-        lists are not eligible to be updated with this call.
+    ) -> TypesList:
+        """
+        Updates the name of a list.
 
         Args:
-          name: New list name
+          name: New name of the list.
 
           extra_headers: Send extra headers
 
@@ -164,7 +153,7 @@ class ListsResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=ListResponse,
+            cast_to=TypesList,
         )
 
     def list(
@@ -178,10 +167,11 @@ class ListsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> ListSearchResponse:
-        """
-        Grata's Search Lists API enables you to search for and return details about the
-        lists in your organization. Private lists will not be returned with this call.
+    ) -> ListListResponse:
+        """Search for and return details about the lists in your organization.
+
+        Private
+        lists will not be returned with this call.
 
         Args:
           name: List name
@@ -211,7 +201,7 @@ class ListsResource(SyncAPIResource):
                     list_list_params.ListListParams,
                 ),
             ),
-            cast_to=ListSearchResponse,
+            cast_to=ListListResponse,
         )
 
     def delete(
@@ -226,7 +216,7 @@ class ListsResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
     ) -> None:
         """
-        Grata's Delete List API enables you to delete an existing list.
+        Deletes an existing list.
 
         Args:
           extra_headers: Send extra headers
@@ -248,12 +238,58 @@ class ListsResource(SyncAPIResource):
             cast_to=NoneType,
         )
 
+    def companies(
+        self,
+        list_uid: str,
+        *,
+        action: Literal["add", "remove"],
+        domains: TypingList[str] | NotGiven = NOT_GIVEN,
+        uids: TypingList[str] | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> ListCompaniesResponse:
+        """
+        Allows users to add or remove companies from an existing list.
+
+        Args:
+          action: The action to perform.
+
+          domains: Domains to add or remove from a list (max of 500 permitted per call).
+
+          uids: Grata company UIDs to add or remove from a list (max of 500 permitted per call).
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not list_uid:
+            raise ValueError(f"Expected a non-empty value for `list_uid` but received {list_uid!r}")
+        return self._post(
+            f"/api/v1.4/lists/{list_uid}/companies/",
+            body=maybe_transform(
+                {
+                    "action": action,
+                    "domains": domains,
+                    "uids": uids,
+                },
+                list_companies_params.ListCompaniesParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=ListCompaniesResponse,
+        )
+
 
 class AsyncListsResource(AsyncAPIResource):
-    @cached_property
-    def companies(self) -> AsyncCompaniesResource:
-        return AsyncCompaniesResource(self._client)
-
     @cached_property
     def with_raw_response(self) -> AsyncListsResourceWithRawResponse:
         """
@@ -276,22 +312,21 @@ class AsyncListsResource(AsyncAPIResource):
     async def create(
         self,
         *,
-        name: str | NotGiven = NOT_GIVEN,
+        name: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> ListResponse:
-        """The create call will allow users to create a list in Grata.
+    ) -> TypesList:
+        """Create a list in Grata.
 
-        The list visibility
-        will be set to organization and it will be visible in the Grata UI for all users
-        within the account to view.
+        The list visibility will be set to organization and it
+        will be visible in the Grata UI for all users within the account to view.
 
         Args:
-          name: Name of list being created
+          name: Name of the list being created.
 
           extra_headers: Send extra headers
 
@@ -307,7 +342,7 @@ class AsyncListsResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=ListResponse,
+            cast_to=TypesList,
         )
 
     async def retrieve(
@@ -320,10 +355,10 @@ class AsyncListsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> ListResponse:
+    ) -> TypesList:
         """
-        Grata's List Details API returns key data points about a list, including the
-        UID, created date, last updated date, and count of companies in the list.
+        Returns key data points about a list, including the UID, created date, last
+        updated date, and count of companies in the list.
 
         Args:
           extra_headers: Send extra headers
@@ -341,28 +376,26 @@ class AsyncListsResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=ListResponse,
+            cast_to=TypesList,
         )
 
     async def update(
         self,
         list_uid: str,
         *,
-        name: str | NotGiven = NOT_GIVEN,
+        name: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> ListResponse:
-        """Grata's Update List Name API enables you to update the name of a list.
-
-        Private
-        lists are not eligible to be updated with this call.
+    ) -> TypesList:
+        """
+        Updates the name of a list.
 
         Args:
-          name: New list name
+          name: New name of the list.
 
           extra_headers: Send extra headers
 
@@ -380,7 +413,7 @@ class AsyncListsResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=ListResponse,
+            cast_to=TypesList,
         )
 
     async def list(
@@ -394,10 +427,11 @@ class AsyncListsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> ListSearchResponse:
-        """
-        Grata's Search Lists API enables you to search for and return details about the
-        lists in your organization. Private lists will not be returned with this call.
+    ) -> ListListResponse:
+        """Search for and return details about the lists in your organization.
+
+        Private
+        lists will not be returned with this call.
 
         Args:
           name: List name
@@ -427,7 +461,7 @@ class AsyncListsResource(AsyncAPIResource):
                     list_list_params.ListListParams,
                 ),
             ),
-            cast_to=ListSearchResponse,
+            cast_to=ListListResponse,
         )
 
     async def delete(
@@ -442,7 +476,7 @@ class AsyncListsResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
     ) -> None:
         """
-        Grata's Delete List API enables you to delete an existing list.
+        Deletes an existing list.
 
         Args:
           extra_headers: Send extra headers
@@ -462,6 +496,56 @@ class AsyncListsResource(AsyncAPIResource):
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=NoneType,
+        )
+
+    async def companies(
+        self,
+        list_uid: str,
+        *,
+        action: Literal["add", "remove"],
+        domains: TypingList[str] | NotGiven = NOT_GIVEN,
+        uids: TypingList[str] | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> ListCompaniesResponse:
+        """
+        Allows users to add or remove companies from an existing list.
+
+        Args:
+          action: The action to perform.
+
+          domains: Domains to add or remove from a list (max of 500 permitted per call).
+
+          uids: Grata company UIDs to add or remove from a list (max of 500 permitted per call).
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not list_uid:
+            raise ValueError(f"Expected a non-empty value for `list_uid` but received {list_uid!r}")
+        return await self._post(
+            f"/api/v1.4/lists/{list_uid}/companies/",
+            body=await async_maybe_transform(
+                {
+                    "action": action,
+                    "domains": domains,
+                    "uids": uids,
+                },
+                list_companies_params.ListCompaniesParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=ListCompaniesResponse,
         )
 
 
@@ -484,10 +568,9 @@ class ListsResourceWithRawResponse:
         self.delete = to_raw_response_wrapper(
             lists.delete,
         )
-
-    @cached_property
-    def companies(self) -> CompaniesResourceWithRawResponse:
-        return CompaniesResourceWithRawResponse(self._lists.companies)
+        self.companies = to_raw_response_wrapper(
+            lists.companies,
+        )
 
 
 class AsyncListsResourceWithRawResponse:
@@ -509,10 +592,9 @@ class AsyncListsResourceWithRawResponse:
         self.delete = async_to_raw_response_wrapper(
             lists.delete,
         )
-
-    @cached_property
-    def companies(self) -> AsyncCompaniesResourceWithRawResponse:
-        return AsyncCompaniesResourceWithRawResponse(self._lists.companies)
+        self.companies = async_to_raw_response_wrapper(
+            lists.companies,
+        )
 
 
 class ListsResourceWithStreamingResponse:
@@ -534,10 +616,9 @@ class ListsResourceWithStreamingResponse:
         self.delete = to_streamed_response_wrapper(
             lists.delete,
         )
-
-    @cached_property
-    def companies(self) -> CompaniesResourceWithStreamingResponse:
-        return CompaniesResourceWithStreamingResponse(self._lists.companies)
+        self.companies = to_streamed_response_wrapper(
+            lists.companies,
+        )
 
 
 class AsyncListsResourceWithStreamingResponse:
@@ -559,7 +640,6 @@ class AsyncListsResourceWithStreamingResponse:
         self.delete = async_to_streamed_response_wrapper(
             lists.delete,
         )
-
-    @cached_property
-    def companies(self) -> AsyncCompaniesResourceWithStreamingResponse:
-        return AsyncCompaniesResourceWithStreamingResponse(self._lists.companies)
+        self.companies = async_to_streamed_response_wrapper(
+            lists.companies,
+        )
