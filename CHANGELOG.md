@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.1 (2024-12-04)
+
+Full Changelog: [v1.0.0...v1.0.1](https://github.com/TJC-LP/grata-python/compare/v1.0.0...v1.0.1)
+
+### Chores
+
+* update SDK settings ([#7](https://github.com/TJC-LP/grata-python/issues/7)) ([4cf102e](https://github.com/TJC-LP/grata-python/commit/4cf102e6e3b638a134ff245c2bdd2962794704ea))
+
 ## 1.0.0 (2024-12-04)
 
 Full Changelog: [v0.0.1-alpha.1...v1.0.0](https://github.com/TJC-LP/grata-python/compare/v0.0.1-alpha.1...v1.0.0)

@@ -24,31 +24,38 @@ pip install grata
 The full API of this library can be found in [api.md](api.md).
 
 ```python
+import os
 from grata import Grata
 
-client = Grata()
-
-company_detailed = client.enrich.create(
-    authorization="Token 840cda398b02093940807af4885853500c1cf5bb",
+client = Grata(
+    token=os.environ.get("GRATA_API_KEY"),  # This is the default and can be omitted
 )
+
+company_detailed = client.enrich.create()
 print(company_detailed.count)
 ```
+
+While you can provide a `token` keyword argument,
+we recommend using [python-dotenv](https://pypi.org/project/python-dotenv/)
+to add `GRATA_API_KEY="GRATA_API_KEY"` to your `.env` file
+so that your Token is not stored in source control.
 
 ## Async usage
 
 Simply import `AsyncGrata` instead of `Grata` and use `await` with each API call:
 
 ```python
+import os
 import asyncio
 from grata import AsyncGrata
 
-client = AsyncGrata()
+client = AsyncGrata(
+    token=os.environ.get("GRATA_API_KEY"),  # This is the default and can be omitted
+)
 
 
 async def main() -> None:
-    company_detailed = await client.enrich.create(
-        authorization="Token 840cda398b02093940807af4885853500c1cf5bb",
-    )
+    company_detailed = await client.enrich.create()
     print(company_detailed.count)
 
 
@@ -82,9 +89,7 @@ from grata import Grata
 client = Grata()
 
 try:
-    client.enrich.create(
-        authorization="Token 840cda398b02093940807af4885853500c1cf5bb",
-    )
+    client.enrich.create()
 except grata.APIConnectionError as e:
     print("The server could not be reached")
     print(e.__cause__)  # an underlying Exception, likely raised within httpx.
@@ -127,9 +132,7 @@ client = Grata(
 )
 
 # Or, configure per-request:
-client.with_options(max_retries=5).enrich.create(
-    authorization="Token 840cda398b02093940807af4885853500c1cf5bb",
-)
+client.with_options(max_retries=5).enrich.create()
 ```
 
 ### Timeouts
@@ -152,9 +155,7 @@ client = Grata(
 )
 
 # Override per-request:
-client.with_options(timeout=5.0).enrich.create(
-    authorization="Token 840cda398b02093940807af4885853500c1cf5bb",
-)
+client.with_options(timeout=5.0).enrich.create()
 ```
 
 On timeout, an `APITimeoutError` is thrown.
@@ -195,9 +196,7 @@ The "raw" Response object can be accessed by prefixing `.with_raw_response.` to 
 from grata import Grata
 
 client = Grata()
-response = client.enrich.with_raw_response.create(
-    authorization="Token 840cda398b02093940807af4885853500c1cf5bb",
-)
+response = client.enrich.with_raw_response.create()
 print(response.headers.get('X-My-Header'))
 
 enrich = response.parse()  # get the object that `enrich.create()` would have returned
@@ -215,9 +214,7 @@ The above interface eagerly reads the full response body when you make the reque
 To stream the response body, use `.with_streaming_response` instead, which requires a context manager and only reads the response body once you call `.read()`, `.text()`, `.json()`, `.iter_bytes()`, `.iter_text()`, `.iter_lines()` or `.parse()`. In the async client, these are async methods.
 
 ```python
-with client.enrich.with_streaming_response.create(
-    authorization="Token 840cda398b02093940807af4885853500c1cf5bb",
-) as response:
+with client.enrich.with_streaming_response.create() as response:
     print(response.headers.get("X-My-Header"))
 
     for line in response.iter_lines():

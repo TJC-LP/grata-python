@@ -3,16 +3,12 @@
 from __future__ import annotations
 
 from typing import List
-from typing_extensions import Literal, Required, Annotated, TypedDict
-
-from .._utils import PropertyInfo
+from typing_extensions import Literal, TypedDict
 
 __all__ = ["ListCompaniesParams"]
 
 
 class ListCompaniesParams(TypedDict, total=False):
-    authorization: Required[Annotated[str, PropertyInfo(alias="Authorization")]]
-
     action: Literal["add", "remove"]
 
     domains: List[str]

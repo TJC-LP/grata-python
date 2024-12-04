@@ -19,15 +19,12 @@ class TestSearch:
 
     @parametrize
     def test_method_create(self, client: Grata) -> None:
-        search = client.search.create(
-            authorization="Authorization",
-        )
+        search = client.search.create()
         assert_matches_type(CompanyBasic, search, path=["response"])
 
     @parametrize
     def test_method_create_with_all_params(self, client: Grata) -> None:
         search = client.search.create(
-            authorization="Authorization",
             business_models=["software"],
             company_uid="26AJRCR2",
             domain="slack.com",
@@ -82,9 +79,7 @@ class TestSearch:
 
     @parametrize
     def test_raw_response_create(self, client: Grata) -> None:
-        response = client.search.with_raw_response.create(
-            authorization="Authorization",
-        )
+        response = client.search.with_raw_response.create()
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -93,9 +88,7 @@ class TestSearch:
 
     @parametrize
     def test_streaming_response_create(self, client: Grata) -> None:
-        with client.search.with_streaming_response.create(
-            authorization="Authorization",
-        ) as response:
+        with client.search.with_streaming_response.create() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
@@ -106,15 +99,12 @@ class TestSearch:
 
     @parametrize
     def test_method_similar(self, client: Grata) -> None:
-        search = client.search.similar(
-            authorization="Authorization",
-        )
+        search = client.search.similar()
         assert_matches_type(CompanyBasic, search, path=["response"])
 
     @parametrize
     def test_method_similar_with_all_params(self, client: Grata) -> None:
         search = client.search.similar(
-            authorization="Authorization",
             business_models=["software"],
             company_uid="26AJRCR2",
             domain="slack.com",
@@ -169,9 +159,7 @@ class TestSearch:
 
     @parametrize
     def test_raw_response_similar(self, client: Grata) -> None:
-        response = client.search.with_raw_response.similar(
-            authorization="Authorization",
-        )
+        response = client.search.with_raw_response.similar()
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -180,9 +168,7 @@ class TestSearch:
 
     @parametrize
     def test_streaming_response_similar(self, client: Grata) -> None:
-        with client.search.with_streaming_response.similar(
-            authorization="Authorization",
-        ) as response:
+        with client.search.with_streaming_response.similar() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
@@ -197,15 +183,12 @@ class TestAsyncSearch:
 
     @parametrize
     async def test_method_create(self, async_client: AsyncGrata) -> None:
-        search = await async_client.search.create(
-            authorization="Authorization",
-        )
+        search = await async_client.search.create()
         assert_matches_type(CompanyBasic, search, path=["response"])
 
     @parametrize
     async def test_method_create_with_all_params(self, async_client: AsyncGrata) -> None:
         search = await async_client.search.create(
-            authorization="Authorization",
             business_models=["software"],
             company_uid="26AJRCR2",
             domain="slack.com",
@@ -260,9 +243,7 @@ class TestAsyncSearch:
 
     @parametrize
     async def test_raw_response_create(self, async_client: AsyncGrata) -> None:
-        response = await async_client.search.with_raw_response.create(
-            authorization="Authorization",
-        )
+        response = await async_client.search.with_raw_response.create()
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -271,9 +252,7 @@ class TestAsyncSearch:
 
     @parametrize
     async def test_streaming_response_create(self, async_client: AsyncGrata) -> None:
-        async with async_client.search.with_streaming_response.create(
-            authorization="Authorization",
-        ) as response:
+        async with async_client.search.with_streaming_response.create() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
@@ -284,15 +263,12 @@ class TestAsyncSearch:
 
     @parametrize
     async def test_method_similar(self, async_client: AsyncGrata) -> None:
-        search = await async_client.search.similar(
-            authorization="Authorization",
-        )
+        search = await async_client.search.similar()
         assert_matches_type(CompanyBasic, search, path=["response"])
 
     @parametrize
     async def test_method_similar_with_all_params(self, async_client: AsyncGrata) -> None:
         search = await async_client.search.similar(
-            authorization="Authorization",
             business_models=["software"],
             company_uid="26AJRCR2",
             domain="slack.com",
@@ -347,9 +323,7 @@ class TestAsyncSearch:
 
     @parametrize
     async def test_raw_response_similar(self, async_client: AsyncGrata) -> None:
-        response = await async_client.search.with_raw_response.similar(
-            authorization="Authorization",
-        )
+        response = await async_client.search.with_raw_response.similar()
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -358,9 +332,7 @@ class TestAsyncSearch:
 
     @parametrize
     async def test_streaming_response_similar(self, async_client: AsyncGrata) -> None:
-        async with async_client.search.with_streaming_response.similar(
-            authorization="Authorization",
-        ) as response:
+        async with async_client.search.with_streaming_response.similar() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
