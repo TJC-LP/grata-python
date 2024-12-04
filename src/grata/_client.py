@@ -46,21 +46,19 @@ __all__ = [
 
 
 class Grata(SyncAPIClient):
-    enrichment: resources.EnrichmentResource
-    bulk_enrichment: resources.BulkEnrichmentResource
-    search: resources.SearchResource
-    similar_search: resources.SimilarSearchResource
+    enrichments: resources.EnrichmentsResource
+    searches: resources.SearchesResource
     lists: resources.ListsResource
     with_raw_response: GrataWithRawResponse
     with_streaming_response: GrataWithStreamedResponse
 
     # client options
-    authorization: str
+    api_token: str
 
     def __init__(
         self,
         *,
-        authorization: str | None = None,
+        api_token: str | None = None,
         base_url: str | httpx.URL | None = None,
         timeout: Union[float, Timeout, None, NotGiven] = NOT_GIVEN,
         max_retries: int = DEFAULT_MAX_RETRIES,
@@ -82,15 +80,15 @@ class Grata(SyncAPIClient):
     ) -> None:
         """Construct a new synchronous grata client instance.
 
-        This automatically infers the `authorization` argument from the `GRATA_API_KEY` environment variable if it is not provided.
+        This automatically infers the `api_token` argument from the `GRATA_API_TOKEN` environment variable if it is not provided.
         """
-        if authorization is None:
-            authorization = os.environ.get("GRATA_API_KEY")
-        if authorization is None:
+        if api_token is None:
+            api_token = os.environ.get("GRATA_API_TOKEN")
+        if api_token is None:
             raise GrataError(
-                "The authorization client option must be set either by passing authorization to the client or by setting the GRATA_API_KEY environment variable"
+                "The api_token client option must be set either by passing api_token to the client or by setting the GRATA_API_TOKEN environment variable"
             )
-        self.authorization = authorization
+        self.api_token = api_token
 
         if base_url is None:
             base_url = os.environ.get("GRATA_BASE_URL")
@@ -108,10 +106,8 @@ class Grata(SyncAPIClient):
             _strict_response_validation=_strict_response_validation,
         )
 
-        self.enrichment = resources.EnrichmentResource(self)
-        self.bulk_enrichment = resources.BulkEnrichmentResource(self)
-        self.search = resources.SearchResource(self)
-        self.similar_search = resources.SimilarSearchResource(self)
+        self.enrichments = resources.EnrichmentsResource(self)
+        self.searches = resources.SearchesResource(self)
         self.lists = resources.ListsResource(self)
         self.with_raw_response = GrataWithRawResponse(self)
         self.with_streaming_response = GrataWithStreamedResponse(self)
@@ -124,8 +120,8 @@ class Grata(SyncAPIClient):
     @property
     @override
     def auth_headers(self) -> dict[str, str]:
-        authorization = self.authorization
-        return {"Authorization": authorization}
+        api_token = self.api_token
+        return {"Authorization": api_token}
 
     @property
     @override
@@ -139,7 +135,7 @@ class Grata(SyncAPIClient):
     def copy(
         self,
         *,
-        authorization: str | None = None,
+        api_token: str | None = None,
         base_url: str | httpx.URL | None = None,
         timeout: float | Timeout | None | NotGiven = NOT_GIVEN,
         http_client: httpx.Client | None = None,
@@ -173,7 +169,7 @@ class Grata(SyncAPIClient):
 
         http_client = http_client or self._client
         return self.__class__(
-            authorization=authorization or self.authorization,
+            api_token=api_token or self.api_token,
             base_url=base_url or self.base_url,
             timeout=self.timeout if isinstance(timeout, NotGiven) else timeout,
             http_client=http_client,
@@ -222,21 +218,19 @@ class Grata(SyncAPIClient):
 
 
 class AsyncGrata(AsyncAPIClient):
-    enrichment: resources.AsyncEnrichmentResource
-    bulk_enrichment: resources.AsyncBulkEnrichmentResource
-    search: resources.AsyncSearchResource
-    similar_search: resources.AsyncSimilarSearchResource
+    enrichments: resources.AsyncEnrichmentsResource
+    searches: resources.AsyncSearchesResource
     lists: resources.AsyncListsResource
     with_raw_response: AsyncGrataWithRawResponse
     with_streaming_response: AsyncGrataWithStreamedResponse
 
     # client options
-    authorization: str
+    api_token: str
 
     def __init__(
         self,
         *,
-        authorization: str | None = None,
+        api_token: str | None = None,
         base_url: str | httpx.URL | None = None,
         timeout: Union[float, Timeout, None, NotGiven] = NOT_GIVEN,
         max_retries: int = DEFAULT_MAX_RETRIES,
@@ -258,15 +252,15 @@ class AsyncGrata(AsyncAPIClient):
     ) -> None:
         """Construct a new async grata client instance.
 
-        This automatically infers the `authorization` argument from the `GRATA_API_KEY` environment variable if it is not provided.
+        This automatically infers the `api_token` argument from the `GRATA_API_TOKEN` environment variable if it is not provided.
         """
-        if authorization is None:
-            authorization = os.environ.get("GRATA_API_KEY")
-        if authorization is None:
+        if api_token is None:
+            api_token = os.environ.get("GRATA_API_TOKEN")
+        if api_token is None:
             raise GrataError(
-                "The authorization client option must be set either by passing authorization to the client or by setting the GRATA_API_KEY environment variable"
+                "The api_token client option must be set either by passing api_token to the client or by setting the GRATA_API_TOKEN environment variable"
             )
-        self.authorization = authorization
+        self.api_token = api_token
 
         if base_url is None:
             base_url = os.environ.get("GRATA_BASE_URL")
@@ -284,10 +278,8 @@ class AsyncGrata(AsyncAPIClient):
             _strict_response_validation=_strict_response_validation,
         )
 
-        self.enrichment = resources.AsyncEnrichmentResource(self)
-        self.bulk_enrichment = resources.AsyncBulkEnrichmentResource(self)
-        self.search = resources.AsyncSearchResource(self)
-        self.similar_search = resources.AsyncSimilarSearchResource(self)
+        self.enrichments = resources.AsyncEnrichmentsResource(self)
+        self.searches = resources.AsyncSearchesResource(self)
         self.lists = resources.AsyncListsResource(self)
         self.with_raw_response = AsyncGrataWithRawResponse(self)
         self.with_streaming_response = AsyncGrataWithStreamedResponse(self)
@@ -300,8 +292,8 @@ class AsyncGrata(AsyncAPIClient):
     @property
     @override
     def auth_headers(self) -> dict[str, str]:
-        authorization = self.authorization
-        return {"Authorization": authorization}
+        api_token = self.api_token
+        return {"Authorization": api_token}
 
     @property
     @override
@@ -315,7 +307,7 @@ class AsyncGrata(AsyncAPIClient):
     def copy(
         self,
         *,
-        authorization: str | None = None,
+        api_token: str | None = None,
         base_url: str | httpx.URL | None = None,
         timeout: float | Timeout | None | NotGiven = NOT_GIVEN,
         http_client: httpx.AsyncClient | None = None,
@@ -349,7 +341,7 @@ class AsyncGrata(AsyncAPIClient):
 
         http_client = http_client or self._client
         return self.__class__(
-            authorization=authorization or self.authorization,
+            api_token=api_token or self.api_token,
             base_url=base_url or self.base_url,
             timeout=self.timeout if isinstance(timeout, NotGiven) else timeout,
             http_client=http_client,
@@ -399,37 +391,29 @@ class AsyncGrata(AsyncAPIClient):
 
 class GrataWithRawResponse:
     def __init__(self, client: Grata) -> None:
-        self.enrichment = resources.EnrichmentResourceWithRawResponse(client.enrichment)
-        self.bulk_enrichment = resources.BulkEnrichmentResourceWithRawResponse(client.bulk_enrichment)
-        self.search = resources.SearchResourceWithRawResponse(client.search)
-        self.similar_search = resources.SimilarSearchResourceWithRawResponse(client.similar_search)
+        self.enrichments = resources.EnrichmentsResourceWithRawResponse(client.enrichments)
+        self.searches = resources.SearchesResourceWithRawResponse(client.searches)
         self.lists = resources.ListsResourceWithRawResponse(client.lists)
 
 
 class AsyncGrataWithRawResponse:
     def __init__(self, client: AsyncGrata) -> None:
-        self.enrichment = resources.AsyncEnrichmentResourceWithRawResponse(client.enrichment)
-        self.bulk_enrichment = resources.AsyncBulkEnrichmentResourceWithRawResponse(client.bulk_enrichment)
-        self.search = resources.AsyncSearchResourceWithRawResponse(client.search)
-        self.similar_search = resources.AsyncSimilarSearchResourceWithRawResponse(client.similar_search)
+        self.enrichments = resources.AsyncEnrichmentsResourceWithRawResponse(client.enrichments)
+        self.searches = resources.AsyncSearchesResourceWithRawResponse(client.searches)
         self.lists = resources.AsyncListsResourceWithRawResponse(client.lists)
 
 
 class GrataWithStreamedResponse:
     def __init__(self, client: Grata) -> None:
-        self.enrichment = resources.EnrichmentResourceWithStreamingResponse(client.enrichment)
-        self.bulk_enrichment = resources.BulkEnrichmentResourceWithStreamingResponse(client.bulk_enrichment)
-        self.search = resources.SearchResourceWithStreamingResponse(client.search)
-        self.similar_search = resources.SimilarSearchResourceWithStreamingResponse(client.similar_search)
+        self.enrichments = resources.EnrichmentsResourceWithStreamingResponse(client.enrichments)
+        self.searches = resources.SearchesResourceWithStreamingResponse(client.searches)
         self.lists = resources.ListsResourceWithStreamingResponse(client.lists)
 
 
 class AsyncGrataWithStreamedResponse:
     def __init__(self, client: AsyncGrata) -> None:
-        self.enrichment = resources.AsyncEnrichmentResourceWithStreamingResponse(client.enrichment)
-        self.bulk_enrichment = resources.AsyncBulkEnrichmentResourceWithStreamingResponse(client.bulk_enrichment)
-        self.search = resources.AsyncSearchResourceWithStreamingResponse(client.search)
-        self.similar_search = resources.AsyncSimilarSearchResourceWithStreamingResponse(client.similar_search)
+        self.enrichments = resources.AsyncEnrichmentsResourceWithStreamingResponse(client.enrichments)
+        self.searches = resources.AsyncSearchesResourceWithStreamingResponse(client.searches)
         self.lists = resources.AsyncListsResourceWithStreamingResponse(client.lists)
 
 

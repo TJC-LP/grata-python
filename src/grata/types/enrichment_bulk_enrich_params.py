@@ -3,14 +3,14 @@
 from __future__ import annotations
 
 from typing import List
-from typing_extensions import TypedDict
+from typing_extensions import Required, TypedDict
 
-__all__ = ["BulkEnrichmentCreateParams"]
+__all__ = ["EnrichmentBulkEnrichParams"]
 
 
-class BulkEnrichmentCreateParams(TypedDict, total=False):
-    company_uids: List[str]
+class EnrichmentBulkEnrichParams(TypedDict, total=False):
+    company_uids: Required[List[str]]
     """An array of unique alphanumeric Grata IDs for the companies."""
 
-    domains: List[str]
+    domains: Required[List[str]]
     """An array of domains for the companies being enriched."""
