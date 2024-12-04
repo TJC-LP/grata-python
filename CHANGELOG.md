@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.1.0 (2024-12-04)
+
+Full Changelog: [v1.0.1...v1.1.0](https://github.com/TJC-LP/grata-python/compare/v1.0.1...v1.1.0)
+
+### Features
+
+* Update _version.py ([d672fcf](https://github.com/TJC-LP/grata-python/commit/d672fcf009945101e5e8b2464a5026ffdca008b8))
+* Update pyproject.toml ([dd5a043](https://github.com/TJC-LP/grata-python/commit/dd5a043f015e3b1ed2e58ba2171cdff1f19d8951))
+
 ## 1.0.1 (2024-12-04)
 
 Full Changelog: [v1.0.0...v1.0.1](https://github.com/TJC-LP/grata-python/compare/v1.0.0...v1.0.1)
