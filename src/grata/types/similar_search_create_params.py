@@ -6,7 +6,7 @@ from typing import List, Iterable
 from typing_extensions import Literal, TypedDict
 
 __all__ = [
-    "SearchCreateParams",
+    "SimilarSearchCreateParams",
     "Headquarters",
     "HeadquartersExclude",
     "HeadquartersInclude",
@@ -17,8 +17,18 @@ __all__ = [
 ]
 
 
-class SearchCreateParams(TypedDict, total=False):
+class SimilarSearchCreateParams(TypedDict, total=False):
     business_models: List[str]
+
+    company_uid: str
+    """Alphanumeric Grata ID for the company (case-sensitive)."""
+
+    domain: str
+    """Domain of the company for similar search.
+
+    Protocol and path can be included. If both the domain and company_uid are
+    specified, domain will be referenced.
+    """
 
     employees_change: Iterable[float]
 

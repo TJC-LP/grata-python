@@ -11,5 +11,5 @@ class ListListParams(TypedDict, total=False):
     name: str
     """List name"""
 
-    page: str
+    page: int
     """The page of results to be returned"""

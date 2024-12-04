@@ -28,7 +28,7 @@ def pytest_collection_modifyitems(items: list[pytest.Function]) -> None:
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
-token = "GRATA_API_KEY"
+authorization = "My Authorization"
 
 
 @pytest.fixture(scope="session")
@@ -37,7 +37,7 @@ def client(request: FixtureRequest) -> Iterator[Grata]:
     if not isinstance(strict, bool):
         raise TypeError(f"Unexpected fixture parameter type {type(strict)}, expected {bool}")
 
-    with Grata(base_url=base_url, token=token, _strict_response_validation=strict) as client:
+    with Grata(base_url=base_url, authorization=authorization, _strict_response_validation=strict) as client:
         yield client
 
 
@@ -47,5 +47,5 @@ async def async_client(request: FixtureRequest) -> AsyncIterator[AsyncGrata]:
     if not isinstance(strict, bool):
         raise TypeError(f"Unexpected fixture parameter type {type(strict)}, expected {bool}")
 
-    async with AsyncGrata(base_url=base_url, token=token, _strict_response_validation=strict) as client:
+    async with AsyncGrata(base_url=base_url, authorization=authorization, _strict_response_validation=strict) as client:
         yield client

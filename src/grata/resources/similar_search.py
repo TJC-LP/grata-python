@@ -7,7 +7,7 @@ from typing_extensions import Literal
 
 import httpx
 
-from ..types import search_create_params
+from ..types import similar_search_create_params
 from .._types import NOT_GIVEN, Body, Query, Headers, NotGiven
 from .._utils import (
     maybe_transform,
@@ -22,35 +22,37 @@ from .._response import (
     async_to_streamed_response_wrapper,
 )
 from .._base_client import make_request_options
-from ..types.company_basic import CompanyBasic
+from ..types.similar_company_response import SimilarCompanyResponse
 
-__all__ = ["SearchResource", "AsyncSearchResource"]
+__all__ = ["SimilarSearchResource", "AsyncSimilarSearchResource"]
 
 
-class SearchResource(SyncAPIResource):
+class SimilarSearchResource(SyncAPIResource):
     @cached_property
-    def with_raw_response(self) -> SearchResourceWithRawResponse:
+    def with_raw_response(self) -> SimilarSearchResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return the
         the raw response object instead of the parsed content.
 
         For more information, see https://www.github.com/TJC-LP/grata-python#accessing-raw-response-data-eg-headers
         """
-        return SearchResourceWithRawResponse(self)
+        return SimilarSearchResourceWithRawResponse(self)
 
     @cached_property
-    def with_streaming_response(self) -> SearchResourceWithStreamingResponse:
+    def with_streaming_response(self) -> SimilarSearchResourceWithStreamingResponse:
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
         For more information, see https://www.github.com/TJC-LP/grata-python#with_streaming_response
         """
-        return SearchResourceWithStreamingResponse(self)
+        return SimilarSearchResourceWithStreamingResponse(self)
 
     def create(
         self,
         *,
         business_models: List[str] | NotGiven = NOT_GIVEN,
+        company_uid: str | NotGiven = NOT_GIVEN,
+        domain: str | NotGiven = NOT_GIVEN,
         employees_change: Iterable[float] | NotGiven = NOT_GIVEN,
         employees_change_time: Literal["month", "quarter", "six_month", "annual"] | NotGiven = NOT_GIVEN,
         employees_on_professional_networks_range: Iterable[int] | NotGiven = NOT_GIVEN,
@@ -58,14 +60,14 @@ class SearchResource(SyncAPIResource):
         funding_size: Iterable[int] | NotGiven = NOT_GIVEN,
         funding_stage: List[str] | NotGiven = NOT_GIVEN,
         grata_employees_estimates_range: Iterable[int] | NotGiven = NOT_GIVEN,
-        headquarters: search_create_params.Headquarters | NotGiven = NOT_GIVEN,
-        industry_classifications: search_create_params.IndustryClassifications | NotGiven = NOT_GIVEN,
+        headquarters: similar_search_create_params.Headquarters | NotGiven = NOT_GIVEN,
+        industry_classifications: similar_search_create_params.IndustryClassifications | NotGiven = NOT_GIVEN,
         is_funded: bool | NotGiven = NOT_GIVEN,
-        lists: search_create_params.Lists | NotGiven = NOT_GIVEN,
+        lists: similar_search_create_params.Lists | NotGiven = NOT_GIVEN,
         ownership: List[str] | NotGiven = NOT_GIVEN,
         page_token: str | NotGiven = NOT_GIVEN,
         terms_exclude: List[str] | NotGiven = NOT_GIVEN,
-        terms_include: search_create_params.TermsInclude | NotGiven = NOT_GIVEN,
+        terms_include: similar_search_create_params.TermsInclude | NotGiven = NOT_GIVEN,
         year_founded: Iterable[int] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -73,14 +75,19 @@ class SearchResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> CompanyBasic:
-        """Returns Grata-powered search results based on an input search query.
+    ) -> SimilarCompanyResponse:
+        """Returns Grata-powered search results based on a similar company search.
 
-        If you're
-        using any of the filters in the UI that are not presented below, the results may
-        differ.
+        If
+        you're using any of the filters in the UI that are not presented below, the
+        results may differ.
 
         Args:
+          company_uid: Alphanumeric Grata ID for the company (case-sensitive).
+
+          domain: Domain of the company for similar search. Protocol and path can be included. If
+              both the domain and company_uid are specified, domain will be referenced.
+
           page_token: Page token used for pagination.
 
           extra_headers: Send extra headers
@@ -92,10 +99,12 @@ class SearchResource(SyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         return self._post(
-            "/api/v1.4/search/",
+            "/api/v1.4/search-similar/",
             body=maybe_transform(
                 {
                     "business_models": business_models,
+                    "company_uid": company_uid,
+                    "domain": domain,
                     "employees_change": employees_change,
                     "employees_change_time": employees_change_time,
                     "employees_on_professional_networks_range": employees_on_professional_networks_range,
@@ -113,39 +122,41 @@ class SearchResource(SyncAPIResource):
                     "terms_include": terms_include,
                     "year_founded": year_founded,
                 },
-                search_create_params.SearchCreateParams,
+                similar_search_create_params.SimilarSearchCreateParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=CompanyBasic,
+            cast_to=SimilarCompanyResponse,
         )
 
 
-class AsyncSearchResource(AsyncAPIResource):
+class AsyncSimilarSearchResource(AsyncAPIResource):
     @cached_property
-    def with_raw_response(self) -> AsyncSearchResourceWithRawResponse:
+    def with_raw_response(self) -> AsyncSimilarSearchResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return the
         the raw response object instead of the parsed content.
 
         For more information, see https://www.github.com/TJC-LP/grata-python#accessing-raw-response-data-eg-headers
         """
-        return AsyncSearchResourceWithRawResponse(self)
+        return AsyncSimilarSearchResourceWithRawResponse(self)
 
     @cached_property
-    def with_streaming_response(self) -> AsyncSearchResourceWithStreamingResponse:
+    def with_streaming_response(self) -> AsyncSimilarSearchResourceWithStreamingResponse:
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
         For more information, see https://www.github.com/TJC-LP/grata-python#with_streaming_response
         """
-        return AsyncSearchResourceWithStreamingResponse(self)
+        return AsyncSimilarSearchResourceWithStreamingResponse(self)
 
     async def create(
         self,
         *,
         business_models: List[str] | NotGiven = NOT_GIVEN,
+        company_uid: str | NotGiven = NOT_GIVEN,
+        domain: str | NotGiven = NOT_GIVEN,
         employees_change: Iterable[float] | NotGiven = NOT_GIVEN,
         employees_change_time: Literal["month", "quarter", "six_month", "annual"] | NotGiven = NOT_GIVEN,
         employees_on_professional_networks_range: Iterable[int] | NotGiven = NOT_GIVEN,
@@ -153,14 +164,14 @@ class AsyncSearchResource(AsyncAPIResource):
         funding_size: Iterable[int] | NotGiven = NOT_GIVEN,
         funding_stage: List[str] | NotGiven = NOT_GIVEN,
         grata_employees_estimates_range: Iterable[int] | NotGiven = NOT_GIVEN,
-        headquarters: search_create_params.Headquarters | NotGiven = NOT_GIVEN,
-        industry_classifications: search_create_params.IndustryClassifications | NotGiven = NOT_GIVEN,
+        headquarters: similar_search_create_params.Headquarters | NotGiven = NOT_GIVEN,
+        industry_classifications: similar_search_create_params.IndustryClassifications | NotGiven = NOT_GIVEN,
         is_funded: bool | NotGiven = NOT_GIVEN,
-        lists: search_create_params.Lists | NotGiven = NOT_GIVEN,
+        lists: similar_search_create_params.Lists | NotGiven = NOT_GIVEN,
         ownership: List[str] | NotGiven = NOT_GIVEN,
         page_token: str | NotGiven = NOT_GIVEN,
         terms_exclude: List[str] | NotGiven = NOT_GIVEN,
-        terms_include: search_create_params.TermsInclude | NotGiven = NOT_GIVEN,
+        terms_include: similar_search_create_params.TermsInclude | NotGiven = NOT_GIVEN,
         year_founded: Iterable[int] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -168,14 +179,19 @@ class AsyncSearchResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> CompanyBasic:
-        """Returns Grata-powered search results based on an input search query.
+    ) -> SimilarCompanyResponse:
+        """Returns Grata-powered search results based on a similar company search.
 
-        If you're
-        using any of the filters in the UI that are not presented below, the results may
-        differ.
+        If
+        you're using any of the filters in the UI that are not presented below, the
+        results may differ.
 
         Args:
+          company_uid: Alphanumeric Grata ID for the company (case-sensitive).
+
+          domain: Domain of the company for similar search. Protocol and path can be included. If
+              both the domain and company_uid are specified, domain will be referenced.
+
           page_token: Page token used for pagination.
 
           extra_headers: Send extra headers
@@ -187,10 +203,12 @@ class AsyncSearchResource(AsyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         return await self._post(
-            "/api/v1.4/search/",
+            "/api/v1.4/search-similar/",
             body=await async_maybe_transform(
                 {
                     "business_models": business_models,
+                    "company_uid": company_uid,
+                    "domain": domain,
                     "employees_change": employees_change,
                     "employees_change_time": employees_change_time,
                     "employees_on_professional_networks_range": employees_on_professional_networks_range,
@@ -208,46 +226,46 @@ class AsyncSearchResource(AsyncAPIResource):
                     "terms_include": terms_include,
                     "year_founded": year_founded,
                 },
-                search_create_params.SearchCreateParams,
+                similar_search_create_params.SimilarSearchCreateParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=CompanyBasic,
+            cast_to=SimilarCompanyResponse,
         )
 
 
-class SearchResourceWithRawResponse:
-    def __init__(self, search: SearchResource) -> None:
-        self._search = search
+class SimilarSearchResourceWithRawResponse:
+    def __init__(self, similar_search: SimilarSearchResource) -> None:
+        self._similar_search = similar_search
 
         self.create = to_raw_response_wrapper(
-            search.create,
+            similar_search.create,
         )
 
 
-class AsyncSearchResourceWithRawResponse:
-    def __init__(self, search: AsyncSearchResource) -> None:
-        self._search = search
+class AsyncSimilarSearchResourceWithRawResponse:
+    def __init__(self, similar_search: AsyncSimilarSearchResource) -> None:
+        self._similar_search = similar_search
 
         self.create = async_to_raw_response_wrapper(
-            search.create,
+            similar_search.create,
         )
 
 
-class SearchResourceWithStreamingResponse:
-    def __init__(self, search: SearchResource) -> None:
-        self._search = search
+class SimilarSearchResourceWithStreamingResponse:
+    def __init__(self, similar_search: SimilarSearchResource) -> None:
+        self._similar_search = similar_search
 
         self.create = to_streamed_response_wrapper(
-            search.create,
+            similar_search.create,
         )
 
 
-class AsyncSearchResourceWithStreamingResponse:
-    def __init__(self, search: AsyncSearchResource) -> None:
-        self._search = search
+class AsyncSimilarSearchResourceWithStreamingResponse:
+    def __init__(self, similar_search: AsyncSimilarSearchResource) -> None:
+        self._similar_search = similar_search
 
         self.create = async_to_streamed_response_wrapper(
-            search.create,
+            similar_search.create,
         )

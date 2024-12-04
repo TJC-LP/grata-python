@@ -9,3 +9,4 @@ __all__ = ["ListUpdateParams"]
 
 class ListUpdateParams(TypedDict, total=False):
     name: str
+    """New list name"""

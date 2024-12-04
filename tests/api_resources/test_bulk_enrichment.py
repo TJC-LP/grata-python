@@ -8,81 +8,81 @@ from typing import Any, cast
 import pytest
 
 from grata import Grata, AsyncGrata
+from grata.types import BulkCompanyEnrichment
 from tests.utils import assert_matches_type
-from grata.types.shared import CompanyDetailed
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
 
-class TestEnrich:
+class TestBulkEnrichment:
     parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
 
     @parametrize
     def test_method_create(self, client: Grata) -> None:
-        enrich = client.enrich.create()
-        assert_matches_type(CompanyDetailed, enrich, path=["response"])
+        bulk_enrichment = client.bulk_enrichment.create()
+        assert_matches_type(BulkCompanyEnrichment, bulk_enrichment, path=["response"])
 
     @parametrize
     def test_method_create_with_all_params(self, client: Grata) -> None:
-        enrich = client.enrich.create(
-            company_uid="26AJRCR2",
-            domain="slack.com",
+        bulk_enrichment = client.bulk_enrichment.create(
+            company_uids=["GAGRYBUR", "UFFY5AZY"],
+            domains=["okta.com", "slack.com"],
         )
-        assert_matches_type(CompanyDetailed, enrich, path=["response"])
+        assert_matches_type(BulkCompanyEnrichment, bulk_enrichment, path=["response"])
 
     @parametrize
     def test_raw_response_create(self, client: Grata) -> None:
-        response = client.enrich.with_raw_response.create()
+        response = client.bulk_enrichment.with_raw_response.create()
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        enrich = response.parse()
-        assert_matches_type(CompanyDetailed, enrich, path=["response"])
+        bulk_enrichment = response.parse()
+        assert_matches_type(BulkCompanyEnrichment, bulk_enrichment, path=["response"])
 
     @parametrize
     def test_streaming_response_create(self, client: Grata) -> None:
-        with client.enrich.with_streaming_response.create() as response:
+        with client.bulk_enrichment.with_streaming_response.create() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
-            enrich = response.parse()
-            assert_matches_type(CompanyDetailed, enrich, path=["response"])
+            bulk_enrichment = response.parse()
+            assert_matches_type(BulkCompanyEnrichment, bulk_enrichment, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
 
-class TestAsyncEnrich:
+class TestAsyncBulkEnrichment:
     parametrize = pytest.mark.parametrize("async_client", [False, True], indirect=True, ids=["loose", "strict"])
 
     @parametrize
     async def test_method_create(self, async_client: AsyncGrata) -> None:
-        enrich = await async_client.enrich.create()
-        assert_matches_type(CompanyDetailed, enrich, path=["response"])
+        bulk_enrichment = await async_client.bulk_enrichment.create()
+        assert_matches_type(BulkCompanyEnrichment, bulk_enrichment, path=["response"])
 
     @parametrize
     async def test_method_create_with_all_params(self, async_client: AsyncGrata) -> None:
-        enrich = await async_client.enrich.create(
-            company_uid="26AJRCR2",
-            domain="slack.com",
+        bulk_enrichment = await async_client.bulk_enrichment.create(
+            company_uids=["GAGRYBUR", "UFFY5AZY"],
+            domains=["okta.com", "slack.com"],
         )
-        assert_matches_type(CompanyDetailed, enrich, path=["response"])
+        assert_matches_type(BulkCompanyEnrichment, bulk_enrichment, path=["response"])
 
     @parametrize
     async def test_raw_response_create(self, async_client: AsyncGrata) -> None:
-        response = await async_client.enrich.with_raw_response.create()
+        response = await async_client.bulk_enrichment.with_raw_response.create()
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        enrich = await response.parse()
-        assert_matches_type(CompanyDetailed, enrich, path=["response"])
+        bulk_enrichment = await response.parse()
+        assert_matches_type(BulkCompanyEnrichment, bulk_enrichment, path=["response"])
 
     @parametrize
     async def test_streaming_response_create(self, async_client: AsyncGrata) -> None:
-        async with async_client.enrich.with_streaming_response.create() as response:
+        async with async_client.bulk_enrichment.with_streaming_response.create() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
-            enrich = await response.parse()
-            assert_matches_type(CompanyDetailed, enrich, path=["response"])
+            bulk_enrichment = await response.parse()
+            assert_matches_type(BulkCompanyEnrichment, bulk_enrichment, path=["response"])
 
         assert cast(Any, response.is_closed) is True
