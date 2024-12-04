@@ -698,7 +698,7 @@ class TestGrata:
         with pytest.raises(APITimeoutError):
             self.client.post(
                 "/api/v1.4/enrich/",
-                body=cast(object, dict()),
+                body=cast(object, dict(domain="google.com")),
                 cast_to=httpx.Response,
                 options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
             )
@@ -713,7 +713,7 @@ class TestGrata:
         with pytest.raises(APIStatusError):
             self.client.post(
                 "/api/v1.4/enrich/",
-                body=cast(object, dict()),
+                body=cast(object, dict(domain="google.com")),
                 cast_to=httpx.Response,
                 options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
             )
@@ -1457,7 +1457,7 @@ class TestAsyncGrata:
         with pytest.raises(APITimeoutError):
             await self.client.post(
                 "/api/v1.4/enrich/",
-                body=cast(object, dict()),
+                body=cast(object, dict(domain="google.com")),
                 cast_to=httpx.Response,
                 options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
             )
@@ -1472,7 +1472,7 @@ class TestAsyncGrata:
         with pytest.raises(APIStatusError):
             await self.client.post(
                 "/api/v1.4/enrich/",
-                body=cast(object, dict()),
+                body=cast(object, dict(domain="google.com")),
                 cast_to=httpx.Response,
                 options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
             )
