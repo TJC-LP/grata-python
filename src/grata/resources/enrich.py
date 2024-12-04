@@ -47,7 +47,6 @@ class EnrichResource(SyncAPIResource):
     def create(
         self,
         *,
-        authorization: str,
         company_uid: str | NotGiven = NOT_GIVEN,
         domain: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -75,7 +74,6 @@ class EnrichResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        extra_headers = {"Authorization": authorization, **(extra_headers or {})}
         return self._post(
             "/api/v1.4/enrich/",
             body=maybe_transform(
@@ -115,7 +113,6 @@ class AsyncEnrichResource(AsyncAPIResource):
     async def create(
         self,
         *,
-        authorization: str,
         company_uid: str | NotGiven = NOT_GIVEN,
         domain: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -143,7 +140,6 @@ class AsyncEnrichResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        extra_headers = {"Authorization": authorization, **(extra_headers or {})}
         return await self._post(
             "/api/v1.4/enrich/",
             body=await async_maybe_transform(

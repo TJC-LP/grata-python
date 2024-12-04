@@ -3,9 +3,7 @@
 from __future__ import annotations
 
 from typing import List, Iterable, Optional
-from typing_extensions import Literal, Required, Annotated, TypedDict
-
-from .._utils import PropertyInfo
+from typing_extensions import Literal, TypedDict
 
 __all__ = [
     "SearchCreateParams",
@@ -20,8 +18,6 @@ __all__ = [
 
 
 class SearchCreateParams(TypedDict, total=False):
-    authorization: Required[Annotated[str, PropertyInfo(alias="Authorization")]]
-
     business_models: List[
         Literal[
             "software",
