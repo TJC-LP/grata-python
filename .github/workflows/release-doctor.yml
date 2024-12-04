@@ -2,7 +2,7 @@ name: Release Doctor
 on:
   pull_request:
     branches:
-      - main
+      - custom-code-from-staging-z98eb1
   workflow_dispatch:
 
 jobs:

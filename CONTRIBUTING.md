@@ -63,7 +63,7 @@ If you’d like to use the repository from source, you can either install from g
 To install via git:
 
 ```sh
-$ pip install git+ssh://git@github.com/TJC-LP/grata-python.git
+$ pip install git+ssh://git@github.com/TJC-LP/grata-python#custom-code-from-staging-z98eb1.git
 ```
 
 Alternatively, you can build from source and install the wheel file:
