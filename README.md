@@ -16,7 +16,7 @@ The REST API documentation can be found on [docs.grata.com](https://docs.grata.c
 
 ```sh
 # install from PyPI
-pip install --pre grata
+pip install grata
 ```
 
 ## Usage
