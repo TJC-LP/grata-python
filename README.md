@@ -31,8 +31,10 @@ client = Grata(
     token=os.environ.get("GRATA_API_KEY"),  # This is the default and can be omitted
 )
 
-company_detailed = client.enrich.create()
-print(company_detailed.count)
+company_detailed = client.enrich.create(
+    domain="google.com",
+)
+print(company_detailed.results)
 ```
 
 While you can provide a `token` keyword argument,
@@ -55,8 +57,10 @@ client = AsyncGrata(
 
 
 async def main() -> None:
-    company_detailed = await client.enrich.create()
-    print(company_detailed.count)
+    company_detailed = await client.enrich.create(
+        domain="google.com",
+    )
+    print(company_detailed.results)
 
 
 asyncio.run(main())
@@ -89,7 +93,9 @@ from grata import Grata
 client = Grata()
 
 try:
-    client.enrich.create()
+    client.enrich.create(
+        domain="google.com",
+    )
 except grata.APIConnectionError as e:
     print("The server could not be reached")
     print(e.__cause__)  # an underlying Exception, likely raised within httpx.
@@ -132,7 +138,9 @@ client = Grata(
 )
 
 # Or, configure per-request:
-client.with_options(max_retries=5).enrich.create()
+client.with_options(max_retries=5).enrich.create(
+    domain="google.com",
+)
 ```
 
 ### Timeouts
@@ -155,7 +163,9 @@ client = Grata(
 )
 
 # Override per-request:
-client.with_options(timeout=5.0).enrich.create()
+client.with_options(timeout=5.0).enrich.create(
+    domain="google.com",
+)
 ```
 
 On timeout, an `APITimeoutError` is thrown.
@@ -196,11 +206,13 @@ The "raw" Response object can be accessed by prefixing `.with_raw_response.` to 
 from grata import Grata
 
 client = Grata()
-response = client.enrich.with_raw_response.create()
+response = client.enrich.with_raw_response.create(
+    domain="google.com",
+)
 print(response.headers.get('X-My-Header'))
 
 enrich = response.parse()  # get the object that `enrich.create()` would have returned
-print(enrich.count)
+print(enrich.results)
 ```
 
 These methods return an [`APIResponse`](https://github.com/TJC-LP/grata-python/tree/main/src/grata/_response.py) object.
@@ -214,7 +226,9 @@ The above interface eagerly reads the full response body when you make the reque
 To stream the response body, use `.with_streaming_response` instead, which requires a context manager and only reads the response body once you call `.read()`, `.text()`, `.json()`, `.iter_bytes()`, `.iter_text()`, `.iter_lines()` or `.parse()`. In the async client, these are async methods.
 
 ```python
-with client.enrich.with_streaming_response.create() as response:
+with client.enrich.with_streaming_response.create(
+    domain="google.com",
+) as response:
     print(response.headers.get("X-My-Header"))
 
     for line in response.iter_lines():
