@@ -2,10 +2,10 @@ name: CI
 on:
   push:
     branches:
-      - custom-code-from-staging-z98eb1
+      - main
   pull_request:
     branches:
-      - custom-code-from-staging-z98eb1
+      - main
       - next
 
 jobs:
