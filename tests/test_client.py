@@ -30,7 +30,7 @@ from grata._base_client import DEFAULT_TIMEOUT, HTTPX_DEFAULT_TIMEOUT, BaseClien
 from .utils import update_env
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
-authorization = "My Authorization"
+api_token = "My API Token"
 
 
 def _get_params(client: BaseClient[Any, Any]) -> dict[str, str]:
@@ -52,7 +52,7 @@ def _get_open_connections(client: Grata | AsyncGrata) -> int:
 
 
 class TestGrata:
-    client = Grata(base_url=base_url, authorization=authorization, _strict_response_validation=True)
+    client = Grata(base_url=base_url, api_token=api_token, _strict_response_validation=True)
 
     @pytest.mark.respx(base_url=base_url)
     def test_raw_response(self, respx_mock: MockRouter) -> None:
@@ -78,9 +78,9 @@ class TestGrata:
         copied = self.client.copy()
         assert id(copied) != id(self.client)
 
-        copied = self.client.copy(authorization="another My Authorization")
-        assert copied.authorization == "another My Authorization"
-        assert self.client.authorization == "My Authorization"
+        copied = self.client.copy(api_token="another My API Token")
+        assert copied.api_token == "another My API Token"
+        assert self.client.api_token == "My API Token"
 
     def test_copy_default_options(self) -> None:
         # options that have a default are overridden correctly
@@ -100,10 +100,7 @@ class TestGrata:
 
     def test_copy_default_headers(self) -> None:
         client = Grata(
-            base_url=base_url,
-            authorization=authorization,
-            _strict_response_validation=True,
-            default_headers={"X-Foo": "bar"},
+            base_url=base_url, api_token=api_token, _strict_response_validation=True, default_headers={"X-Foo": "bar"}
         )
         assert client.default_headers["X-Foo"] == "bar"
 
@@ -137,10 +134,7 @@ class TestGrata:
 
     def test_copy_default_query(self) -> None:
         client = Grata(
-            base_url=base_url,
-            authorization=authorization,
-            _strict_response_validation=True,
-            default_query={"foo": "bar"},
+            base_url=base_url, api_token=api_token, _strict_response_validation=True, default_query={"foo": "bar"}
         )
         assert _get_params(client)["foo"] == "bar"
 
@@ -265,7 +259,7 @@ class TestGrata:
 
     def test_client_timeout_option(self) -> None:
         client = Grata(
-            base_url=base_url, authorization=authorization, _strict_response_validation=True, timeout=httpx.Timeout(0)
+            base_url=base_url, api_token=api_token, _strict_response_validation=True, timeout=httpx.Timeout(0)
         )
 
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
@@ -276,10 +270,7 @@ class TestGrata:
         # custom timeout given to the httpx client should be used
         with httpx.Client(timeout=None) as http_client:
             client = Grata(
-                base_url=base_url,
-                authorization=authorization,
-                _strict_response_validation=True,
-                http_client=http_client,
+                base_url=base_url, api_token=api_token, _strict_response_validation=True, http_client=http_client
             )
 
             request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
@@ -289,10 +280,7 @@ class TestGrata:
         # no timeout given to the httpx client should not use the httpx default
         with httpx.Client() as http_client:
             client = Grata(
-                base_url=base_url,
-                authorization=authorization,
-                _strict_response_validation=True,
-                http_client=http_client,
+                base_url=base_url, api_token=api_token, _strict_response_validation=True, http_client=http_client
             )
 
             request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
@@ -302,10 +290,7 @@ class TestGrata:
         # explicitly passing the default timeout currently results in it being ignored
         with httpx.Client(timeout=HTTPX_DEFAULT_TIMEOUT) as http_client:
             client = Grata(
-                base_url=base_url,
-                authorization=authorization,
-                _strict_response_validation=True,
-                http_client=http_client,
+                base_url=base_url, api_token=api_token, _strict_response_validation=True, http_client=http_client
             )
 
             request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
@@ -317,17 +302,14 @@ class TestGrata:
             async with httpx.AsyncClient() as http_client:
                 Grata(
                     base_url=base_url,
-                    authorization=authorization,
+                    api_token=api_token,
                     _strict_response_validation=True,
                     http_client=cast(Any, http_client),
                 )
 
     def test_default_headers_option(self) -> None:
         client = Grata(
-            base_url=base_url,
-            authorization=authorization,
-            _strict_response_validation=True,
-            default_headers={"X-Foo": "bar"},
+            base_url=base_url, api_token=api_token, _strict_response_validation=True, default_headers={"X-Foo": "bar"}
         )
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
         assert request.headers.get("x-foo") == "bar"
@@ -335,7 +317,7 @@ class TestGrata:
 
         client2 = Grata(
             base_url=base_url,
-            authorization=authorization,
+            api_token=api_token,
             _strict_response_validation=True,
             default_headers={
                 "X-Foo": "stainless",
@@ -347,19 +329,19 @@ class TestGrata:
         assert request.headers.get("x-stainless-lang") == "my-overriding-header"
 
     def test_validate_headers(self) -> None:
-        client = Grata(base_url=base_url, authorization=authorization, _strict_response_validation=True)
+        client = Grata(base_url=base_url, api_token=api_token, _strict_response_validation=True)
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
-        assert request.headers.get("Authorization") == authorization
+        assert request.headers.get("Authorization") == api_token
 
         with pytest.raises(GrataError):
-            with update_env(**{"GRATA_API_KEY": Omit()}):
-                client2 = Grata(base_url=base_url, authorization=None, _strict_response_validation=True)
+            with update_env(**{"GRATA_API_TOKEN": Omit()}):
+                client2 = Grata(base_url=base_url, api_token=None, _strict_response_validation=True)
             _ = client2
 
     def test_default_query_option(self) -> None:
         client = Grata(
             base_url=base_url,
-            authorization=authorization,
+            api_token=api_token,
             _strict_response_validation=True,
             default_query={"query_param": "bar"},
         )
@@ -561,9 +543,7 @@ class TestGrata:
         assert response.foo == 2
 
     def test_base_url_setter(self) -> None:
-        client = Grata(
-            base_url="https://example.com/from_init", authorization=authorization, _strict_response_validation=True
-        )
+        client = Grata(base_url="https://example.com/from_init", api_token=api_token, _strict_response_validation=True)
         assert client.base_url == "https://example.com/from_init/"
 
         client.base_url = "https://example.com/from_setter"  # type: ignore[assignment]
@@ -572,20 +552,16 @@ class TestGrata:
 
     def test_base_url_env(self) -> None:
         with update_env(GRATA_BASE_URL="http://localhost:5000/from/env"):
-            client = Grata(authorization=authorization, _strict_response_validation=True)
+            client = Grata(api_token=api_token, _strict_response_validation=True)
             assert client.base_url == "http://localhost:5000/from/env/"
 
     @pytest.mark.parametrize(
         "client",
         [
+            Grata(base_url="http://localhost:5000/custom/path/", api_token=api_token, _strict_response_validation=True),
             Grata(
                 base_url="http://localhost:5000/custom/path/",
-                authorization=authorization,
-                _strict_response_validation=True,
-            ),
-            Grata(
-                base_url="http://localhost:5000/custom/path/",
-                authorization=authorization,
+                api_token=api_token,
                 _strict_response_validation=True,
                 http_client=httpx.Client(),
             ),
@@ -605,14 +581,10 @@ class TestGrata:
     @pytest.mark.parametrize(
         "client",
         [
+            Grata(base_url="http://localhost:5000/custom/path/", api_token=api_token, _strict_response_validation=True),
             Grata(
                 base_url="http://localhost:5000/custom/path/",
-                authorization=authorization,
-                _strict_response_validation=True,
-            ),
-            Grata(
-                base_url="http://localhost:5000/custom/path/",
-                authorization=authorization,
+                api_token=api_token,
                 _strict_response_validation=True,
                 http_client=httpx.Client(),
             ),
@@ -632,14 +604,10 @@ class TestGrata:
     @pytest.mark.parametrize(
         "client",
         [
+            Grata(base_url="http://localhost:5000/custom/path/", api_token=api_token, _strict_response_validation=True),
             Grata(
                 base_url="http://localhost:5000/custom/path/",
-                authorization=authorization,
-                _strict_response_validation=True,
-            ),
-            Grata(
-                base_url="http://localhost:5000/custom/path/",
-                authorization=authorization,
+                api_token=api_token,
                 _strict_response_validation=True,
                 http_client=httpx.Client(),
             ),
@@ -657,7 +625,7 @@ class TestGrata:
         assert request.url == "https://myapi.com/foo"
 
     def test_copied_client_does_not_close_http(self) -> None:
-        client = Grata(base_url=base_url, authorization=authorization, _strict_response_validation=True)
+        client = Grata(base_url=base_url, api_token=api_token, _strict_response_validation=True)
         assert not client.is_closed()
 
         copied = client.copy()
@@ -668,7 +636,7 @@ class TestGrata:
         assert not client.is_closed()
 
     def test_client_context_manager(self) -> None:
-        client = Grata(base_url=base_url, authorization=authorization, _strict_response_validation=True)
+        client = Grata(base_url=base_url, api_token=api_token, _strict_response_validation=True)
         with client as c2:
             assert c2 is client
             assert not c2.is_closed()
@@ -689,12 +657,7 @@ class TestGrata:
 
     def test_client_max_retries_validation(self) -> None:
         with pytest.raises(TypeError, match=r"max_retries cannot be None"):
-            Grata(
-                base_url=base_url,
-                authorization=authorization,
-                _strict_response_validation=True,
-                max_retries=cast(Any, None),
-            )
+            Grata(base_url=base_url, api_token=api_token, _strict_response_validation=True, max_retries=cast(Any, None))
 
     @pytest.mark.respx(base_url=base_url)
     def test_received_text_for_expected_json(self, respx_mock: MockRouter) -> None:
@@ -703,12 +666,12 @@ class TestGrata:
 
         respx_mock.get("/foo").mock(return_value=httpx.Response(200, text="my-custom-format"))
 
-        strict_client = Grata(base_url=base_url, authorization=authorization, _strict_response_validation=True)
+        strict_client = Grata(base_url=base_url, api_token=api_token, _strict_response_validation=True)
 
         with pytest.raises(APIResponseValidationError):
             strict_client.get("/foo", cast_to=Model)
 
-        client = Grata(base_url=base_url, authorization=authorization, _strict_response_validation=False)
+        client = Grata(base_url=base_url, api_token=api_token, _strict_response_validation=False)
 
         response = client.get("/foo", cast_to=Model)
         assert isinstance(response, str)  # type: ignore[unreachable]
@@ -736,7 +699,7 @@ class TestGrata:
     )
     @mock.patch("time.time", mock.MagicMock(return_value=1696004797))
     def test_parse_retry_after_header(self, remaining_retries: int, retry_after: str, timeout: float) -> None:
-        client = Grata(base_url=base_url, authorization=authorization, _strict_response_validation=True)
+        client = Grata(base_url=base_url, api_token=api_token, _strict_response_validation=True)
 
         headers = httpx.Headers({"retry-after": retry_after})
         options = FinalRequestOptions(method="get", url="/foo", max_retries=3)
@@ -751,7 +714,7 @@ class TestGrata:
         with pytest.raises(APITimeoutError):
             self.client.post(
                 "/api/v1.4/enrich/",
-                body=cast(object, dict()),
+                body=cast(object, dict(domain="slack.com")),
                 cast_to=httpx.Response,
                 options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
             )
@@ -766,7 +729,7 @@ class TestGrata:
         with pytest.raises(APIStatusError):
             self.client.post(
                 "/api/v1.4/enrich/",
-                body=cast(object, dict()),
+                body=cast(object, dict(domain="slack.com")),
                 cast_to=httpx.Response,
                 options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
             )
@@ -799,7 +762,7 @@ class TestGrata:
 
         respx_mock.post("/api/v1.4/enrich/").mock(side_effect=retry_handler)
 
-        response = client.enrichment.with_raw_response.create()
+        response = client.enrichments.with_raw_response.enrich(domain="slack.com")
 
         assert response.retries_taken == failures_before_success
         assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
@@ -821,7 +784,9 @@ class TestGrata:
 
         respx_mock.post("/api/v1.4/enrich/").mock(side_effect=retry_handler)
 
-        response = client.enrichment.with_raw_response.create(extra_headers={"x-stainless-retry-count": Omit()})
+        response = client.enrichments.with_raw_response.enrich(
+            domain="slack.com", extra_headers={"x-stainless-retry-count": Omit()}
+        )
 
         assert len(response.http_request.headers.get_list("x-stainless-retry-count")) == 0
 
@@ -844,13 +809,15 @@ class TestGrata:
 
         respx_mock.post("/api/v1.4/enrich/").mock(side_effect=retry_handler)
 
-        response = client.enrichment.with_raw_response.create(extra_headers={"x-stainless-retry-count": "42"})
+        response = client.enrichments.with_raw_response.enrich(
+            domain="slack.com", extra_headers={"x-stainless-retry-count": "42"}
+        )
 
         assert response.http_request.headers.get("x-stainless-retry-count") == "42"
 
 
 class TestAsyncGrata:
-    client = AsyncGrata(base_url=base_url, authorization=authorization, _strict_response_validation=True)
+    client = AsyncGrata(base_url=base_url, api_token=api_token, _strict_response_validation=True)
 
     @pytest.mark.respx(base_url=base_url)
     @pytest.mark.asyncio
@@ -878,9 +845,9 @@ class TestAsyncGrata:
         copied = self.client.copy()
         assert id(copied) != id(self.client)
 
-        copied = self.client.copy(authorization="another My Authorization")
-        assert copied.authorization == "another My Authorization"
-        assert self.client.authorization == "My Authorization"
+        copied = self.client.copy(api_token="another My API Token")
+        assert copied.api_token == "another My API Token"
+        assert self.client.api_token == "My API Token"
 
     def test_copy_default_options(self) -> None:
         # options that have a default are overridden correctly
@@ -900,10 +867,7 @@ class TestAsyncGrata:
 
     def test_copy_default_headers(self) -> None:
         client = AsyncGrata(
-            base_url=base_url,
-            authorization=authorization,
-            _strict_response_validation=True,
-            default_headers={"X-Foo": "bar"},
+            base_url=base_url, api_token=api_token, _strict_response_validation=True, default_headers={"X-Foo": "bar"}
         )
         assert client.default_headers["X-Foo"] == "bar"
 
@@ -937,10 +901,7 @@ class TestAsyncGrata:
 
     def test_copy_default_query(self) -> None:
         client = AsyncGrata(
-            base_url=base_url,
-            authorization=authorization,
-            _strict_response_validation=True,
-            default_query={"foo": "bar"},
+            base_url=base_url, api_token=api_token, _strict_response_validation=True, default_query={"foo": "bar"}
         )
         assert _get_params(client)["foo"] == "bar"
 
@@ -1065,7 +1026,7 @@ class TestAsyncGrata:
 
     async def test_client_timeout_option(self) -> None:
         client = AsyncGrata(
-            base_url=base_url, authorization=authorization, _strict_response_validation=True, timeout=httpx.Timeout(0)
+            base_url=base_url, api_token=api_token, _strict_response_validation=True, timeout=httpx.Timeout(0)
         )
 
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
@@ -1076,10 +1037,7 @@ class TestAsyncGrata:
         # custom timeout given to the httpx client should be used
         async with httpx.AsyncClient(timeout=None) as http_client:
             client = AsyncGrata(
-                base_url=base_url,
-                authorization=authorization,
-                _strict_response_validation=True,
-                http_client=http_client,
+                base_url=base_url, api_token=api_token, _strict_response_validation=True, http_client=http_client
             )
 
             request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
@@ -1089,10 +1047,7 @@ class TestAsyncGrata:
         # no timeout given to the httpx client should not use the httpx default
         async with httpx.AsyncClient() as http_client:
             client = AsyncGrata(
-                base_url=base_url,
-                authorization=authorization,
-                _strict_response_validation=True,
-                http_client=http_client,
+                base_url=base_url, api_token=api_token, _strict_response_validation=True, http_client=http_client
             )
 
             request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
@@ -1102,10 +1057,7 @@ class TestAsyncGrata:
         # explicitly passing the default timeout currently results in it being ignored
         async with httpx.AsyncClient(timeout=HTTPX_DEFAULT_TIMEOUT) as http_client:
             client = AsyncGrata(
-                base_url=base_url,
-                authorization=authorization,
-                _strict_response_validation=True,
-                http_client=http_client,
+                base_url=base_url, api_token=api_token, _strict_response_validation=True, http_client=http_client
             )
 
             request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
@@ -1117,17 +1069,14 @@ class TestAsyncGrata:
             with httpx.Client() as http_client:
                 AsyncGrata(
                     base_url=base_url,
-                    authorization=authorization,
+                    api_token=api_token,
                     _strict_response_validation=True,
                     http_client=cast(Any, http_client),
                 )
 
     def test_default_headers_option(self) -> None:
         client = AsyncGrata(
-            base_url=base_url,
-            authorization=authorization,
-            _strict_response_validation=True,
-            default_headers={"X-Foo": "bar"},
+            base_url=base_url, api_token=api_token, _strict_response_validation=True, default_headers={"X-Foo": "bar"}
         )
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
         assert request.headers.get("x-foo") == "bar"
@@ -1135,7 +1084,7 @@ class TestAsyncGrata:
 
         client2 = AsyncGrata(
             base_url=base_url,
-            authorization=authorization,
+            api_token=api_token,
             _strict_response_validation=True,
             default_headers={
                 "X-Foo": "stainless",
@@ -1147,19 +1096,19 @@ class TestAsyncGrata:
         assert request.headers.get("x-stainless-lang") == "my-overriding-header"
 
     def test_validate_headers(self) -> None:
-        client = AsyncGrata(base_url=base_url, authorization=authorization, _strict_response_validation=True)
+        client = AsyncGrata(base_url=base_url, api_token=api_token, _strict_response_validation=True)
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
-        assert request.headers.get("Authorization") == authorization
+        assert request.headers.get("Authorization") == api_token
 
         with pytest.raises(GrataError):
-            with update_env(**{"GRATA_API_KEY": Omit()}):
-                client2 = AsyncGrata(base_url=base_url, authorization=None, _strict_response_validation=True)
+            with update_env(**{"GRATA_API_TOKEN": Omit()}):
+                client2 = AsyncGrata(base_url=base_url, api_token=None, _strict_response_validation=True)
             _ = client2
 
     def test_default_query_option(self) -> None:
         client = AsyncGrata(
             base_url=base_url,
-            authorization=authorization,
+            api_token=api_token,
             _strict_response_validation=True,
             default_query={"query_param": "bar"},
         )
@@ -1362,7 +1311,7 @@ class TestAsyncGrata:
 
     def test_base_url_setter(self) -> None:
         client = AsyncGrata(
-            base_url="https://example.com/from_init", authorization=authorization, _strict_response_validation=True
+            base_url="https://example.com/from_init", api_token=api_token, _strict_response_validation=True
         )
         assert client.base_url == "https://example.com/from_init/"
 
@@ -1372,20 +1321,18 @@ class TestAsyncGrata:
 
     def test_base_url_env(self) -> None:
         with update_env(GRATA_BASE_URL="http://localhost:5000/from/env"):
-            client = AsyncGrata(authorization=authorization, _strict_response_validation=True)
+            client = AsyncGrata(api_token=api_token, _strict_response_validation=True)
             assert client.base_url == "http://localhost:5000/from/env/"
 
     @pytest.mark.parametrize(
         "client",
         [
             AsyncGrata(
-                base_url="http://localhost:5000/custom/path/",
-                authorization=authorization,
-                _strict_response_validation=True,
+                base_url="http://localhost:5000/custom/path/", api_token=api_token, _strict_response_validation=True
             ),
             AsyncGrata(
                 base_url="http://localhost:5000/custom/path/",
-                authorization=authorization,
+                api_token=api_token,
                 _strict_response_validation=True,
                 http_client=httpx.AsyncClient(),
             ),
@@ -1406,13 +1353,11 @@ class TestAsyncGrata:
         "client",
         [
             AsyncGrata(
-                base_url="http://localhost:5000/custom/path/",
-                authorization=authorization,
-                _strict_response_validation=True,
+                base_url="http://localhost:5000/custom/path/", api_token=api_token, _strict_response_validation=True
             ),
             AsyncGrata(
                 base_url="http://localhost:5000/custom/path/",
-                authorization=authorization,
+                api_token=api_token,
                 _strict_response_validation=True,
                 http_client=httpx.AsyncClient(),
             ),
@@ -1433,13 +1378,11 @@ class TestAsyncGrata:
         "client",
         [
             AsyncGrata(
-                base_url="http://localhost:5000/custom/path/",
-                authorization=authorization,
-                _strict_response_validation=True,
+                base_url="http://localhost:5000/custom/path/", api_token=api_token, _strict_response_validation=True
             ),
             AsyncGrata(
                 base_url="http://localhost:5000/custom/path/",
-                authorization=authorization,
+                api_token=api_token,
                 _strict_response_validation=True,
                 http_client=httpx.AsyncClient(),
             ),
@@ -1457,7 +1400,7 @@ class TestAsyncGrata:
         assert request.url == "https://myapi.com/foo"
 
     async def test_copied_client_does_not_close_http(self) -> None:
-        client = AsyncGrata(base_url=base_url, authorization=authorization, _strict_response_validation=True)
+        client = AsyncGrata(base_url=base_url, api_token=api_token, _strict_response_validation=True)
         assert not client.is_closed()
 
         copied = client.copy()
@@ -1469,7 +1412,7 @@ class TestAsyncGrata:
         assert not client.is_closed()
 
     async def test_client_context_manager(self) -> None:
-        client = AsyncGrata(base_url=base_url, authorization=authorization, _strict_response_validation=True)
+        client = AsyncGrata(base_url=base_url, api_token=api_token, _strict_response_validation=True)
         async with client as c2:
             assert c2 is client
             assert not c2.is_closed()
@@ -1492,10 +1435,7 @@ class TestAsyncGrata:
     async def test_client_max_retries_validation(self) -> None:
         with pytest.raises(TypeError, match=r"max_retries cannot be None"):
             AsyncGrata(
-                base_url=base_url,
-                authorization=authorization,
-                _strict_response_validation=True,
-                max_retries=cast(Any, None),
+                base_url=base_url, api_token=api_token, _strict_response_validation=True, max_retries=cast(Any, None)
             )
 
     @pytest.mark.respx(base_url=base_url)
@@ -1506,12 +1446,12 @@ class TestAsyncGrata:
 
         respx_mock.get("/foo").mock(return_value=httpx.Response(200, text="my-custom-format"))
 
-        strict_client = AsyncGrata(base_url=base_url, authorization=authorization, _strict_response_validation=True)
+        strict_client = AsyncGrata(base_url=base_url, api_token=api_token, _strict_response_validation=True)
 
         with pytest.raises(APIResponseValidationError):
             await strict_client.get("/foo", cast_to=Model)
 
-        client = AsyncGrata(base_url=base_url, authorization=authorization, _strict_response_validation=False)
+        client = AsyncGrata(base_url=base_url, api_token=api_token, _strict_response_validation=False)
 
         response = await client.get("/foo", cast_to=Model)
         assert isinstance(response, str)  # type: ignore[unreachable]
@@ -1540,7 +1480,7 @@ class TestAsyncGrata:
     @mock.patch("time.time", mock.MagicMock(return_value=1696004797))
     @pytest.mark.asyncio
     async def test_parse_retry_after_header(self, remaining_retries: int, retry_after: str, timeout: float) -> None:
-        client = AsyncGrata(base_url=base_url, authorization=authorization, _strict_response_validation=True)
+        client = AsyncGrata(base_url=base_url, api_token=api_token, _strict_response_validation=True)
 
         headers = httpx.Headers({"retry-after": retry_after})
         options = FinalRequestOptions(method="get", url="/foo", max_retries=3)
@@ -1555,7 +1495,7 @@ class TestAsyncGrata:
         with pytest.raises(APITimeoutError):
             await self.client.post(
                 "/api/v1.4/enrich/",
-                body=cast(object, dict()),
+                body=cast(object, dict(domain="slack.com")),
                 cast_to=httpx.Response,
                 options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
             )
@@ -1570,7 +1510,7 @@ class TestAsyncGrata:
         with pytest.raises(APIStatusError):
             await self.client.post(
                 "/api/v1.4/enrich/",
-                body=cast(object, dict()),
+                body=cast(object, dict(domain="slack.com")),
                 cast_to=httpx.Response,
                 options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
             )
@@ -1604,7 +1544,7 @@ class TestAsyncGrata:
 
         respx_mock.post("/api/v1.4/enrich/").mock(side_effect=retry_handler)
 
-        response = await client.enrichment.with_raw_response.create()
+        response = await client.enrichments.with_raw_response.enrich(domain="slack.com")
 
         assert response.retries_taken == failures_before_success
         assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
@@ -1629,7 +1569,9 @@ class TestAsyncGrata:
 
         respx_mock.post("/api/v1.4/enrich/").mock(side_effect=retry_handler)
 
-        response = await client.enrichment.with_raw_response.create(extra_headers={"x-stainless-retry-count": Omit()})
+        response = await client.enrichments.with_raw_response.enrich(
+            domain="slack.com", extra_headers={"x-stainless-retry-count": Omit()}
+        )
 
         assert len(response.http_request.headers.get_list("x-stainless-retry-count")) == 0
 
@@ -1653,7 +1595,9 @@ class TestAsyncGrata:
 
         respx_mock.post("/api/v1.4/enrich/").mock(side_effect=retry_handler)
 
-        response = await client.enrichment.with_raw_response.create(extra_headers={"x-stainless-retry-count": "42"})
+        response = await client.enrichments.with_raw_response.enrich(
+            domain="slack.com", extra_headers={"x-stainless-retry-count": "42"}
+        )
 
         assert response.http_request.headers.get("x-stainless-retry-count") == "42"
 

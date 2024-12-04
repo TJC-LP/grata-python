@@ -28,17 +28,19 @@ import os
 from grata import Grata
 
 client = Grata(
-    authorization=os.environ.get("GRATA_API_KEY"),  # This is the default and can be omitted
+    api_token=os.environ.get("GRATA_API_TOKEN"),  # This is the default and can be omitted
 )
 
-company_detailed = client.enrichment.create()
-print(company_detailed.company_uid)
+company = client.enrichments.enrich(
+    domain="slack.com",
+)
+print(company.company_uid)
 ```
 
-While you can provide a `authorization` keyword argument,
+While you can provide a `api_token` keyword argument,
 we recommend using [python-dotenv](https://pypi.org/project/python-dotenv/)
-to add `GRATA_API_KEY="My Authorization"` to your `.env` file
-so that your Authorization is not stored in source control.
+to add `GRATA_API_TOKEN="My API Token"` to your `.env` file
+so that your API Token is not stored in source control.
 
 ## Async usage
 
@@ -50,13 +52,15 @@ import asyncio
 from grata import AsyncGrata
 
 client = AsyncGrata(
-    authorization=os.environ.get("GRATA_API_KEY"),  # This is the default and can be omitted
+    api_token=os.environ.get("GRATA_API_TOKEN"),  # This is the default and can be omitted
 )
 
 
 async def main() -> None:
-    company_detailed = await client.enrichment.create()
-    print(company_detailed.company_uid)
+    company = await client.enrichments.enrich(
+        domain="slack.com",
+    )
+    print(company.company_uid)
 
 
 asyncio.run(main())
@@ -89,7 +93,9 @@ from grata import Grata
 client = Grata()
 
 try:
-    client.enrichment.create()
+    client.enrichments.enrich(
+        domain="slack.com",
+    )
 except grata.APIConnectionError as e:
     print("The server could not be reached")
     print(e.__cause__)  # an underlying Exception, likely raised within httpx.
@@ -132,7 +138,9 @@ client = Grata(
 )
 
 # Or, configure per-request:
-client.with_options(max_retries=5).enrichment.create()
+client.with_options(max_retries=5).enrichments.enrich(
+    domain="slack.com",
+)
 ```
 
 ### Timeouts
@@ -155,7 +163,9 @@ client = Grata(
 )
 
 # Override per-request:
-client.with_options(timeout=5.0).enrichment.create()
+client.with_options(timeout=5.0).enrichments.enrich(
+    domain="slack.com",
+)
 ```
 
 On timeout, an `APITimeoutError` is thrown.
@@ -196,10 +206,12 @@ The "raw" Response object can be accessed by prefixing `.with_raw_response.` to 
 from grata import Grata
 
 client = Grata()
-response = client.enrichment.with_raw_response.create()
+response = client.enrichments.with_raw_response.enrich(
+    domain="slack.com",
+)
 print(response.headers.get('X-My-Header'))
 
-enrichment = response.parse()  # get the object that `enrichment.create()` would have returned
+enrichment = response.parse()  # get the object that `enrichments.enrich()` would have returned
 print(enrichment.company_uid)
 ```
 
@@ -214,7 +226,9 @@ The above interface eagerly reads the full response body when you make the reque
 To stream the response body, use `.with_streaming_response` instead, which requires a context manager and only reads the response body once you call `.read()`, `.text()`, `.json()`, `.iter_bytes()`, `.iter_text()`, `.iter_lines()` or `.parse()`. In the async client, these are async methods.
 
 ```python
-with client.enrichment.with_streaming_response.create() as response:
+with client.enrichments.with_streaming_response.enrich(
+    domain="slack.com",
+) as response:
     print(response.headers.get("X-My-Header"))
 
     for line in response.iter_lines():
