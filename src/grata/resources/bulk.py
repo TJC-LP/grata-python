@@ -49,7 +49,6 @@ class BulkResource(SyncAPIResource):
     def enrich(
         self,
         *,
-        authorization: str,
         company_uids: List[str] | NotGiven = NOT_GIVEN,
         domains: List[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -76,7 +75,6 @@ class BulkResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        extra_headers = {"Authorization": authorization, **(extra_headers or {})}
         return self._post(
             "/api/v1.4/bulk/enrich/",
             body=maybe_transform(
@@ -116,7 +114,6 @@ class AsyncBulkResource(AsyncAPIResource):
     async def enrich(
         self,
         *,
-        authorization: str,
         company_uids: List[str] | NotGiven = NOT_GIVEN,
         domains: List[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -143,7 +140,6 @@ class AsyncBulkResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        extra_headers = {"Authorization": authorization, **(extra_headers or {})}
         return await self._post(
             "/api/v1.4/bulk/enrich/",
             body=await async_maybe_transform(
