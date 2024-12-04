@@ -1,13 +1,5 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from .bulk import (
-    BulkResource,
-    AsyncBulkResource,
-    BulkResourceWithRawResponse,
-    AsyncBulkResourceWithRawResponse,
-    BulkResourceWithStreamingResponse,
-    AsyncBulkResourceWithStreamingResponse,
-)
 from .lists import (
     ListsResource,
     AsyncListsResource,
@@ -15,14 +7,6 @@ from .lists import (
     AsyncListsResourceWithRawResponse,
     ListsResourceWithStreamingResponse,
     AsyncListsResourceWithStreamingResponse,
-)
-from .enrich import (
-    EnrichResource,
-    AsyncEnrichResource,
-    EnrichResourceWithRawResponse,
-    AsyncEnrichResourceWithRawResponse,
-    EnrichResourceWithStreamingResponse,
-    AsyncEnrichResourceWithStreamingResponse,
 )
 from .search import (
     SearchResource,
@@ -32,30 +16,60 @@ from .search import (
     SearchResourceWithStreamingResponse,
     AsyncSearchResourceWithStreamingResponse,
 )
+from .enrichment import (
+    EnrichmentResource,
+    AsyncEnrichmentResource,
+    EnrichmentResourceWithRawResponse,
+    AsyncEnrichmentResourceWithRawResponse,
+    EnrichmentResourceWithStreamingResponse,
+    AsyncEnrichmentResourceWithStreamingResponse,
+)
+from .similar_search import (
+    SimilarSearchResource,
+    AsyncSimilarSearchResource,
+    SimilarSearchResourceWithRawResponse,
+    AsyncSimilarSearchResourceWithRawResponse,
+    SimilarSearchResourceWithStreamingResponse,
+    AsyncSimilarSearchResourceWithStreamingResponse,
+)
+from .bulk_enrichment import (
+    BulkEnrichmentResource,
+    AsyncBulkEnrichmentResource,
+    BulkEnrichmentResourceWithRawResponse,
+    AsyncBulkEnrichmentResourceWithRawResponse,
+    BulkEnrichmentResourceWithStreamingResponse,
+    AsyncBulkEnrichmentResourceWithStreamingResponse,
+)
 
 __all__ = [
-    "BulkResource",
-    "AsyncBulkResource",
-    "BulkResourceWithRawResponse",
-    "AsyncBulkResourceWithRawResponse",
-    "BulkResourceWithStreamingResponse",
-    "AsyncBulkResourceWithStreamingResponse",
-    "EnrichResource",
-    "AsyncEnrichResource",
-    "EnrichResourceWithRawResponse",
-    "AsyncEnrichResourceWithRawResponse",
-    "EnrichResourceWithStreamingResponse",
-    "AsyncEnrichResourceWithStreamingResponse",
-    "ListsResource",
-    "AsyncListsResource",
-    "ListsResourceWithRawResponse",
-    "AsyncListsResourceWithRawResponse",
-    "ListsResourceWithStreamingResponse",
-    "AsyncListsResourceWithStreamingResponse",
+    "EnrichmentResource",
+    "AsyncEnrichmentResource",
+    "EnrichmentResourceWithRawResponse",
+    "AsyncEnrichmentResourceWithRawResponse",
+    "EnrichmentResourceWithStreamingResponse",
+    "AsyncEnrichmentResourceWithStreamingResponse",
+    "BulkEnrichmentResource",
+    "AsyncBulkEnrichmentResource",
+    "BulkEnrichmentResourceWithRawResponse",
+    "AsyncBulkEnrichmentResourceWithRawResponse",
+    "BulkEnrichmentResourceWithStreamingResponse",
+    "AsyncBulkEnrichmentResourceWithStreamingResponse",
     "SearchResource",
     "AsyncSearchResource",
     "SearchResourceWithRawResponse",
     "AsyncSearchResourceWithRawResponse",
     "SearchResourceWithStreamingResponse",
     "AsyncSearchResourceWithStreamingResponse",
+    "SimilarSearchResource",
+    "AsyncSimilarSearchResource",
+    "SimilarSearchResourceWithRawResponse",
+    "AsyncSimilarSearchResourceWithRawResponse",
+    "SimilarSearchResourceWithStreamingResponse",
+    "AsyncSimilarSearchResourceWithStreamingResponse",
+    "ListsResource",
+    "AsyncListsResource",
+    "ListsResourceWithRawResponse",
+    "AsyncListsResourceWithRawResponse",
+    "ListsResourceWithStreamingResponse",
+    "AsyncListsResourceWithStreamingResponse",
 ]

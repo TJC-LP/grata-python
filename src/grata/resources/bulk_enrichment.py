@@ -6,7 +6,7 @@ from typing import List
 
 import httpx
 
-from ..types import bulk_enrich_params
+from ..types import bulk_enrichment_create_params
 from .._types import NOT_GIVEN, Body, Query, Headers, NotGiven
 from .._utils import (
     maybe_transform,
@@ -21,32 +21,32 @@ from .._response import (
     async_to_streamed_response_wrapper,
 )
 from .._base_client import make_request_options
-from ..types.shared.company_detailed import CompanyDetailed
+from ..types.bulk_company_enrichment import BulkCompanyEnrichment
 
-__all__ = ["BulkResource", "AsyncBulkResource"]
+__all__ = ["BulkEnrichmentResource", "AsyncBulkEnrichmentResource"]
 
 
-class BulkResource(SyncAPIResource):
+class BulkEnrichmentResource(SyncAPIResource):
     @cached_property
-    def with_raw_response(self) -> BulkResourceWithRawResponse:
+    def with_raw_response(self) -> BulkEnrichmentResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return the
         the raw response object instead of the parsed content.
 
         For more information, see https://www.github.com/TJC-LP/grata-python#accessing-raw-response-data-eg-headers
         """
-        return BulkResourceWithRawResponse(self)
+        return BulkEnrichmentResourceWithRawResponse(self)
 
     @cached_property
-    def with_streaming_response(self) -> BulkResourceWithStreamingResponse:
+    def with_streaming_response(self) -> BulkEnrichmentResourceWithStreamingResponse:
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
         For more information, see https://www.github.com/TJC-LP/grata-python#with_streaming_response
         """
-        return BulkResourceWithStreamingResponse(self)
+        return BulkEnrichmentResourceWithStreamingResponse(self)
 
-    def enrich(
+    def create(
         self,
         *,
         company_uids: List[str] | NotGiven = NOT_GIVEN,
@@ -57,7 +57,7 @@ class BulkResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> CompanyDetailed:
+    ) -> BulkCompanyEnrichment:
         """
         Provide a set of up to 100 company domains or Grata-specific company IDs to
         return relevant firmographic data on requested companies.
@@ -82,36 +82,36 @@ class BulkResource(SyncAPIResource):
                     "company_uids": company_uids,
                     "domains": domains,
                 },
-                bulk_enrich_params.BulkEnrichParams,
+                bulk_enrichment_create_params.BulkEnrichmentCreateParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=CompanyDetailed,
+            cast_to=BulkCompanyEnrichment,
         )
 
 
-class AsyncBulkResource(AsyncAPIResource):
+class AsyncBulkEnrichmentResource(AsyncAPIResource):
     @cached_property
-    def with_raw_response(self) -> AsyncBulkResourceWithRawResponse:
+    def with_raw_response(self) -> AsyncBulkEnrichmentResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return the
         the raw response object instead of the parsed content.
 
         For more information, see https://www.github.com/TJC-LP/grata-python#accessing-raw-response-data-eg-headers
         """
-        return AsyncBulkResourceWithRawResponse(self)
+        return AsyncBulkEnrichmentResourceWithRawResponse(self)
 
     @cached_property
-    def with_streaming_response(self) -> AsyncBulkResourceWithStreamingResponse:
+    def with_streaming_response(self) -> AsyncBulkEnrichmentResourceWithStreamingResponse:
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
         For more information, see https://www.github.com/TJC-LP/grata-python#with_streaming_response
         """
-        return AsyncBulkResourceWithStreamingResponse(self)
+        return AsyncBulkEnrichmentResourceWithStreamingResponse(self)
 
-    async def enrich(
+    async def create(
         self,
         *,
         company_uids: List[str] | NotGiven = NOT_GIVEN,
@@ -122,7 +122,7 @@ class AsyncBulkResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> CompanyDetailed:
+    ) -> BulkCompanyEnrichment:
         """
         Provide a set of up to 100 company domains or Grata-specific company IDs to
         return relevant firmographic data on requested companies.
@@ -147,46 +147,46 @@ class AsyncBulkResource(AsyncAPIResource):
                     "company_uids": company_uids,
                     "domains": domains,
                 },
-                bulk_enrich_params.BulkEnrichParams,
+                bulk_enrichment_create_params.BulkEnrichmentCreateParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=CompanyDetailed,
+            cast_to=BulkCompanyEnrichment,
         )
 
 
-class BulkResourceWithRawResponse:
-    def __init__(self, bulk: BulkResource) -> None:
-        self._bulk = bulk
+class BulkEnrichmentResourceWithRawResponse:
+    def __init__(self, bulk_enrichment: BulkEnrichmentResource) -> None:
+        self._bulk_enrichment = bulk_enrichment
 
-        self.enrich = to_raw_response_wrapper(
-            bulk.enrich,
+        self.create = to_raw_response_wrapper(
+            bulk_enrichment.create,
         )
 
 
-class AsyncBulkResourceWithRawResponse:
-    def __init__(self, bulk: AsyncBulkResource) -> None:
-        self._bulk = bulk
+class AsyncBulkEnrichmentResourceWithRawResponse:
+    def __init__(self, bulk_enrichment: AsyncBulkEnrichmentResource) -> None:
+        self._bulk_enrichment = bulk_enrichment
 
-        self.enrich = async_to_raw_response_wrapper(
-            bulk.enrich,
+        self.create = async_to_raw_response_wrapper(
+            bulk_enrichment.create,
         )
 
 
-class BulkResourceWithStreamingResponse:
-    def __init__(self, bulk: BulkResource) -> None:
-        self._bulk = bulk
+class BulkEnrichmentResourceWithStreamingResponse:
+    def __init__(self, bulk_enrichment: BulkEnrichmentResource) -> None:
+        self._bulk_enrichment = bulk_enrichment
 
-        self.enrich = to_streamed_response_wrapper(
-            bulk.enrich,
+        self.create = to_streamed_response_wrapper(
+            bulk_enrichment.create,
         )
 
 
-class AsyncBulkResourceWithStreamingResponse:
-    def __init__(self, bulk: AsyncBulkResource) -> None:
-        self._bulk = bulk
+class AsyncBulkEnrichmentResourceWithStreamingResponse:
+    def __init__(self, bulk_enrichment: AsyncBulkEnrichmentResource) -> None:
+        self._bulk_enrichment = bulk_enrichment
 
-        self.enrich = async_to_streamed_response_wrapper(
-            bulk.enrich,
+        self.create = async_to_streamed_response_wrapper(
+            bulk_enrichment.create,
         )

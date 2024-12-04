@@ -8,24 +8,26 @@ from typing import Any, cast
 import pytest
 
 from grata import Grata, AsyncGrata
-from grata.types import CompanyBasic
+from grata.types import SimilarCompanyResponse
 from tests.utils import assert_matches_type
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
 
-class TestSearch:
+class TestSimilarSearch:
     parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
 
     @parametrize
     def test_method_create(self, client: Grata) -> None:
-        search = client.search.create()
-        assert_matches_type(CompanyBasic, search, path=["response"])
+        similar_search = client.similar_search.create()
+        assert_matches_type(SimilarCompanyResponse, similar_search, path=["response"])
 
     @parametrize
     def test_method_create_with_all_params(self, client: Grata) -> None:
-        search = client.search.create(
+        similar_search = client.similar_search.create(
             business_models=["string"],
+            company_uid="26AJRCR2",
+            domain="slack.com",
             employees_change=[0],
             employees_change_time="month",
             employees_on_professional_networks_range=[0],
@@ -74,41 +76,43 @@ class TestSearch:
             },
             year_founded=[0],
         )
-        assert_matches_type(CompanyBasic, search, path=["response"])
+        assert_matches_type(SimilarCompanyResponse, similar_search, path=["response"])
 
     @parametrize
     def test_raw_response_create(self, client: Grata) -> None:
-        response = client.search.with_raw_response.create()
+        response = client.similar_search.with_raw_response.create()
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        search = response.parse()
-        assert_matches_type(CompanyBasic, search, path=["response"])
+        similar_search = response.parse()
+        assert_matches_type(SimilarCompanyResponse, similar_search, path=["response"])
 
     @parametrize
     def test_streaming_response_create(self, client: Grata) -> None:
-        with client.search.with_streaming_response.create() as response:
+        with client.similar_search.with_streaming_response.create() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
-            search = response.parse()
-            assert_matches_type(CompanyBasic, search, path=["response"])
+            similar_search = response.parse()
+            assert_matches_type(SimilarCompanyResponse, similar_search, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
 
-class TestAsyncSearch:
+class TestAsyncSimilarSearch:
     parametrize = pytest.mark.parametrize("async_client", [False, True], indirect=True, ids=["loose", "strict"])
 
     @parametrize
     async def test_method_create(self, async_client: AsyncGrata) -> None:
-        search = await async_client.search.create()
-        assert_matches_type(CompanyBasic, search, path=["response"])
+        similar_search = await async_client.similar_search.create()
+        assert_matches_type(SimilarCompanyResponse, similar_search, path=["response"])
 
     @parametrize
     async def test_method_create_with_all_params(self, async_client: AsyncGrata) -> None:
-        search = await async_client.search.create(
+        similar_search = await async_client.similar_search.create(
             business_models=["string"],
+            company_uid="26AJRCR2",
+            domain="slack.com",
             employees_change=[0],
             employees_change_time="month",
             employees_on_professional_networks_range=[0],
@@ -157,24 +161,24 @@ class TestAsyncSearch:
             },
             year_founded=[0],
         )
-        assert_matches_type(CompanyBasic, search, path=["response"])
+        assert_matches_type(SimilarCompanyResponse, similar_search, path=["response"])
 
     @parametrize
     async def test_raw_response_create(self, async_client: AsyncGrata) -> None:
-        response = await async_client.search.with_raw_response.create()
+        response = await async_client.similar_search.with_raw_response.create()
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        search = await response.parse()
-        assert_matches_type(CompanyBasic, search, path=["response"])
+        similar_search = await response.parse()
+        assert_matches_type(SimilarCompanyResponse, similar_search, path=["response"])
 
     @parametrize
     async def test_streaming_response_create(self, async_client: AsyncGrata) -> None:
-        async with async_client.search.with_streaming_response.create() as response:
+        async with async_client.similar_search.with_streaming_response.create() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
-            search = await response.parse()
-            assert_matches_type(CompanyBasic, search, path=["response"])
+            similar_search = await response.parse()
+            assert_matches_type(SimilarCompanyResponse, similar_search, path=["response"])
 
         assert cast(Any, response.is_closed) is True

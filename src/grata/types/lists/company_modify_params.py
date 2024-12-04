@@ -5,11 +5,12 @@ from __future__ import annotations
 from typing import List
 from typing_extensions import Literal, TypedDict
 
-__all__ = ["ListCompaniesParams"]
+__all__ = ["CompanyModifyParams"]
 
 
-class ListCompaniesParams(TypedDict, total=False):
+class CompanyModifyParams(TypedDict, total=False):
     action: Literal["add", "remove"]
+    """Action to perform on the list."""
 
     domains: List[str]
     """Domains to add or remove from a list (max of 500 permitted per call)."""
