@@ -19,15 +19,12 @@ class TestBulk:
 
     @parametrize
     def test_method_enrich(self, client: Grata) -> None:
-        bulk = client.bulk.enrich(
-            authorization="Token 840cda398b02093940807af4885853500c1cf5bb",
-        )
+        bulk = client.bulk.enrich()
         assert_matches_type(CompanyDetailed, bulk, path=["response"])
 
     @parametrize
     def test_method_enrich_with_all_params(self, client: Grata) -> None:
         bulk = client.bulk.enrich(
-            authorization="Token 840cda398b02093940807af4885853500c1cf5bb",
             company_uids=["GAGRYBUR", "UFFY5AZY"],
             domains=["okta.com", "slack.com"],
         )
@@ -35,9 +32,7 @@ class TestBulk:
 
     @parametrize
     def test_raw_response_enrich(self, client: Grata) -> None:
-        response = client.bulk.with_raw_response.enrich(
-            authorization="Token 840cda398b02093940807af4885853500c1cf5bb",
-        )
+        response = client.bulk.with_raw_response.enrich()
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -46,9 +41,7 @@ class TestBulk:
 
     @parametrize
     def test_streaming_response_enrich(self, client: Grata) -> None:
-        with client.bulk.with_streaming_response.enrich(
-            authorization="Token 840cda398b02093940807af4885853500c1cf5bb",
-        ) as response:
+        with client.bulk.with_streaming_response.enrich() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
@@ -63,15 +56,12 @@ class TestAsyncBulk:
 
     @parametrize
     async def test_method_enrich(self, async_client: AsyncGrata) -> None:
-        bulk = await async_client.bulk.enrich(
-            authorization="Token 840cda398b02093940807af4885853500c1cf5bb",
-        )
+        bulk = await async_client.bulk.enrich()
         assert_matches_type(CompanyDetailed, bulk, path=["response"])
 
     @parametrize
     async def test_method_enrich_with_all_params(self, async_client: AsyncGrata) -> None:
         bulk = await async_client.bulk.enrich(
-            authorization="Token 840cda398b02093940807af4885853500c1cf5bb",
             company_uids=["GAGRYBUR", "UFFY5AZY"],
             domains=["okta.com", "slack.com"],
         )
@@ -79,9 +69,7 @@ class TestAsyncBulk:
 
     @parametrize
     async def test_raw_response_enrich(self, async_client: AsyncGrata) -> None:
-        response = await async_client.bulk.with_raw_response.enrich(
-            authorization="Token 840cda398b02093940807af4885853500c1cf5bb",
-        )
+        response = await async_client.bulk.with_raw_response.enrich()
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -90,9 +78,7 @@ class TestAsyncBulk:
 
     @parametrize
     async def test_streaming_response_enrich(self, async_client: AsyncGrata) -> None:
-        async with async_client.bulk.with_streaming_response.enrich(
-            authorization="Token 840cda398b02093940807af4885853500c1cf5bb",
-        ) as response:
+        async with async_client.bulk.with_streaming_response.enrich() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 

@@ -2,14 +2,10 @@
 
 from __future__ import annotations
 
-from typing_extensions import Required, Annotated, TypedDict
-
-from .._utils import PropertyInfo
+from typing_extensions import TypedDict
 
 __all__ = ["ListUpdateParams"]
 
 
 class ListUpdateParams(TypedDict, total=False):
-    authorization: Required[Annotated[str, PropertyInfo(alias="Authorization")]]
-
     name: str

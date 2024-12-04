@@ -50,7 +50,6 @@ class SearchResource(SyncAPIResource):
     def create(
         self,
         *,
-        authorization: str,
         business_models: List[
             Literal[
                 "software",
@@ -201,7 +200,6 @@ class SearchResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        extra_headers = {"Authorization": authorization, **(extra_headers or {})}
         return self._post(
             "/api/v1.4/search/",
             body=maybe_transform(
@@ -237,7 +235,6 @@ class SearchResource(SyncAPIResource):
     def similar(
         self,
         *,
-        authorization: str,
         business_models: List[
             Literal[
                 "software",
@@ -388,7 +385,6 @@ class SearchResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        extra_headers = {"Authorization": authorization, **(extra_headers or {})}
         return self._post(
             "/api/v1.4/search-similar/",
             body=maybe_transform(
@@ -445,7 +441,6 @@ class AsyncSearchResource(AsyncAPIResource):
     async def create(
         self,
         *,
-        authorization: str,
         business_models: List[
             Literal[
                 "software",
@@ -596,7 +591,6 @@ class AsyncSearchResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        extra_headers = {"Authorization": authorization, **(extra_headers or {})}
         return await self._post(
             "/api/v1.4/search/",
             body=await async_maybe_transform(
@@ -632,7 +626,6 @@ class AsyncSearchResource(AsyncAPIResource):
     async def similar(
         self,
         *,
-        authorization: str,
         business_models: List[
             Literal[
                 "software",
@@ -783,7 +776,6 @@ class AsyncSearchResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        extra_headers = {"Authorization": authorization, **(extra_headers or {})}
         return await self._post(
             "/api/v1.4/search-similar/",
             body=await async_maybe_transform(

@@ -2,16 +2,12 @@
 
 from __future__ import annotations
 
-from typing_extensions import Required, Annotated, TypedDict
-
-from .._utils import PropertyInfo
+from typing_extensions import TypedDict
 
 __all__ = ["EnrichCreateParams"]
 
 
 class EnrichCreateParams(TypedDict, total=False):
-    authorization: Required[Annotated[str, PropertyInfo(alias="Authorization")]]
-
     company_uid: str
     """Unique alphanumeric Grata ID for the company (case-sensitive)."""
 

@@ -50,7 +50,6 @@ class ListsResource(SyncAPIResource):
     def create(
         self,
         *,
-        authorization: str,
         name: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -76,7 +75,6 @@ class ListsResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        extra_headers = {"Authorization": authorization, **(extra_headers or {})}
         return self._post(
             "/api/v1.4/lists/",
             body=maybe_transform({"name": name}, list_create_params.ListCreateParams),
@@ -90,7 +88,6 @@ class ListsResource(SyncAPIResource):
         self,
         list_uid: str,
         *,
-        authorization: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -113,7 +110,6 @@ class ListsResource(SyncAPIResource):
         """
         if not list_uid:
             raise ValueError(f"Expected a non-empty value for `list_uid` but received {list_uid!r}")
-        extra_headers = {"Authorization": authorization, **(extra_headers or {})}
         return self._get(
             f"/api/v1.4/lists/{list_uid}/",
             options=make_request_options(
@@ -126,7 +122,6 @@ class ListsResource(SyncAPIResource):
         self,
         list_uid: str,
         *,
-        authorization: str,
         name: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -151,7 +146,6 @@ class ListsResource(SyncAPIResource):
         """
         if not list_uid:
             raise ValueError(f"Expected a non-empty value for `list_uid` but received {list_uid!r}")
-        extra_headers = {"Authorization": authorization, **(extra_headers or {})}
         return self._patch(
             f"/api/v1.4/lists/{list_uid}/",
             body=maybe_transform({"name": name}, list_update_params.ListUpdateParams),
@@ -164,7 +158,6 @@ class ListsResource(SyncAPIResource):
     def list(
         self,
         *,
-        authorization: str,
         name: str | NotGiven = NOT_GIVEN,
         page: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -191,7 +184,6 @@ class ListsResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        extra_headers = {"Authorization": authorization, **(extra_headers or {})}
         return self._get(
             "/api/v1.4/lists/",
             options=make_request_options(
@@ -214,7 +206,6 @@ class ListsResource(SyncAPIResource):
         self,
         list_uid: str,
         *,
-        authorization: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -237,7 +228,6 @@ class ListsResource(SyncAPIResource):
         if not list_uid:
             raise ValueError(f"Expected a non-empty value for `list_uid` but received {list_uid!r}")
         extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        extra_headers.update({"Authorization": authorization})
         return self._delete(
             f"/api/v1.4/lists/{list_uid}/",
             options=make_request_options(
@@ -250,7 +240,6 @@ class ListsResource(SyncAPIResource):
         self,
         list_uid: str,
         *,
-        authorization: str,
         action: Literal["add", "remove"] | NotGiven = NOT_GIVEN,
         domains: List[str] | NotGiven = NOT_GIVEN,
         uids: List[str] | NotGiven = NOT_GIVEN,
@@ -280,7 +269,6 @@ class ListsResource(SyncAPIResource):
         """
         if not list_uid:
             raise ValueError(f"Expected a non-empty value for `list_uid` but received {list_uid!r}")
-        extra_headers = {"Authorization": authorization, **(extra_headers or {})}
         return self._post(
             f"/api/v1.4/lists/{list_uid}/companies/",
             body=maybe_transform(
@@ -321,7 +309,6 @@ class AsyncListsResource(AsyncAPIResource):
     async def create(
         self,
         *,
-        authorization: str,
         name: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -347,7 +334,6 @@ class AsyncListsResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        extra_headers = {"Authorization": authorization, **(extra_headers or {})}
         return await self._post(
             "/api/v1.4/lists/",
             body=await async_maybe_transform({"name": name}, list_create_params.ListCreateParams),
@@ -361,7 +347,6 @@ class AsyncListsResource(AsyncAPIResource):
         self,
         list_uid: str,
         *,
-        authorization: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -384,7 +369,6 @@ class AsyncListsResource(AsyncAPIResource):
         """
         if not list_uid:
             raise ValueError(f"Expected a non-empty value for `list_uid` but received {list_uid!r}")
-        extra_headers = {"Authorization": authorization, **(extra_headers or {})}
         return await self._get(
             f"/api/v1.4/lists/{list_uid}/",
             options=make_request_options(
@@ -397,7 +381,6 @@ class AsyncListsResource(AsyncAPIResource):
         self,
         list_uid: str,
         *,
-        authorization: str,
         name: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -422,7 +405,6 @@ class AsyncListsResource(AsyncAPIResource):
         """
         if not list_uid:
             raise ValueError(f"Expected a non-empty value for `list_uid` but received {list_uid!r}")
-        extra_headers = {"Authorization": authorization, **(extra_headers or {})}
         return await self._patch(
             f"/api/v1.4/lists/{list_uid}/",
             body=await async_maybe_transform({"name": name}, list_update_params.ListUpdateParams),
@@ -435,7 +417,6 @@ class AsyncListsResource(AsyncAPIResource):
     async def list(
         self,
         *,
-        authorization: str,
         name: str | NotGiven = NOT_GIVEN,
         page: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -462,7 +443,6 @@ class AsyncListsResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        extra_headers = {"Authorization": authorization, **(extra_headers or {})}
         return await self._get(
             "/api/v1.4/lists/",
             options=make_request_options(
@@ -485,7 +465,6 @@ class AsyncListsResource(AsyncAPIResource):
         self,
         list_uid: str,
         *,
-        authorization: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -508,7 +487,6 @@ class AsyncListsResource(AsyncAPIResource):
         if not list_uid:
             raise ValueError(f"Expected a non-empty value for `list_uid` but received {list_uid!r}")
         extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        extra_headers.update({"Authorization": authorization})
         return await self._delete(
             f"/api/v1.4/lists/{list_uid}/",
             options=make_request_options(
@@ -521,7 +499,6 @@ class AsyncListsResource(AsyncAPIResource):
         self,
         list_uid: str,
         *,
-        authorization: str,
         action: Literal["add", "remove"] | NotGiven = NOT_GIVEN,
         domains: List[str] | NotGiven = NOT_GIVEN,
         uids: List[str] | NotGiven = NOT_GIVEN,
@@ -551,7 +528,6 @@ class AsyncListsResource(AsyncAPIResource):
         """
         if not list_uid:
             raise ValueError(f"Expected a non-empty value for `list_uid` but received {list_uid!r}")
-        extra_headers = {"Authorization": authorization, **(extra_headers or {})}
         return await self._post(
             f"/api/v1.4/lists/{list_uid}/companies/",
             body=await async_maybe_transform(
