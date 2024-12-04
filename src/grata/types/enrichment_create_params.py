@@ -4,10 +4,10 @@ from __future__ import annotations
 
 from typing_extensions import TypedDict
 
-__all__ = ["EnrichCreateParams"]
+__all__ = ["EnrichmentCreateParams"]
 
 
-class EnrichCreateParams(TypedDict, total=False):
+class EnrichmentCreateParams(TypedDict, total=False):
     company_uid: str
     """Unique alphanumeric Grata ID for the company (case-sensitive)."""
 

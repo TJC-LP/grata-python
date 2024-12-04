@@ -5,10 +5,10 @@ from __future__ import annotations
 from typing import List
 from typing_extensions import TypedDict
 
-__all__ = ["BulkEnrichParams"]
+__all__ = ["BulkEnrichmentCreateParams"]
 
 
-class BulkEnrichParams(TypedDict, total=False):
+class BulkEnrichmentCreateParams(TypedDict, total=False):
     company_uids: List[str]
     """An array of unique alphanumeric Grata IDs for the companies."""
 

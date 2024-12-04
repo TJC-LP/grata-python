@@ -20,7 +20,7 @@ or products provided by Grata please follow the respective company's security re
 
 ### Grata Terms and Policies
 
-Please contact support@grata.com for any questions or concerns regarding security of our services.
+Please contact dev-feedback@grata.com for any questions or concerns regarding security of our services.
 
 ---
 

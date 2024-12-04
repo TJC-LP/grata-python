@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import httpx
 
-from ..types import enrich_create_params
+from ..types import enrichment_create_params
 from .._types import NOT_GIVEN, Body, Query, Headers, NotGiven
 from .._utils import (
     maybe_transform,
@@ -19,30 +19,30 @@ from .._response import (
     async_to_streamed_response_wrapper,
 )
 from .._base_client import make_request_options
-from ..types.shared.company_detailed import CompanyDetailed
+from ..types.company_detailed import CompanyDetailed
 
-__all__ = ["EnrichResource", "AsyncEnrichResource"]
+__all__ = ["EnrichmentResource", "AsyncEnrichmentResource"]
 
 
-class EnrichResource(SyncAPIResource):
+class EnrichmentResource(SyncAPIResource):
     @cached_property
-    def with_raw_response(self) -> EnrichResourceWithRawResponse:
+    def with_raw_response(self) -> EnrichmentResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return the
         the raw response object instead of the parsed content.
 
         For more information, see https://www.github.com/TJC-LP/grata-python#accessing-raw-response-data-eg-headers
         """
-        return EnrichResourceWithRawResponse(self)
+        return EnrichmentResourceWithRawResponse(self)
 
     @cached_property
-    def with_streaming_response(self) -> EnrichResourceWithStreamingResponse:
+    def with_streaming_response(self) -> EnrichmentResourceWithStreamingResponse:
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
         For more information, see https://www.github.com/TJC-LP/grata-python#with_streaming_response
         """
-        return EnrichResourceWithStreamingResponse(self)
+        return EnrichmentResourceWithStreamingResponse(self)
 
     def create(
         self,
@@ -81,7 +81,7 @@ class EnrichResource(SyncAPIResource):
                     "company_uid": company_uid,
                     "domain": domain,
                 },
-                enrich_create_params.EnrichCreateParams,
+                enrichment_create_params.EnrichmentCreateParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
@@ -90,25 +90,25 @@ class EnrichResource(SyncAPIResource):
         )
 
 
-class AsyncEnrichResource(AsyncAPIResource):
+class AsyncEnrichmentResource(AsyncAPIResource):
     @cached_property
-    def with_raw_response(self) -> AsyncEnrichResourceWithRawResponse:
+    def with_raw_response(self) -> AsyncEnrichmentResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return the
         the raw response object instead of the parsed content.
 
         For more information, see https://www.github.com/TJC-LP/grata-python#accessing-raw-response-data-eg-headers
         """
-        return AsyncEnrichResourceWithRawResponse(self)
+        return AsyncEnrichmentResourceWithRawResponse(self)
 
     @cached_property
-    def with_streaming_response(self) -> AsyncEnrichResourceWithStreamingResponse:
+    def with_streaming_response(self) -> AsyncEnrichmentResourceWithStreamingResponse:
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
         For more information, see https://www.github.com/TJC-LP/grata-python#with_streaming_response
         """
-        return AsyncEnrichResourceWithStreamingResponse(self)
+        return AsyncEnrichmentResourceWithStreamingResponse(self)
 
     async def create(
         self,
@@ -147,7 +147,7 @@ class AsyncEnrichResource(AsyncAPIResource):
                     "company_uid": company_uid,
                     "domain": domain,
                 },
-                enrich_create_params.EnrichCreateParams,
+                enrichment_create_params.EnrichmentCreateParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
@@ -156,37 +156,37 @@ class AsyncEnrichResource(AsyncAPIResource):
         )
 
 
-class EnrichResourceWithRawResponse:
-    def __init__(self, enrich: EnrichResource) -> None:
-        self._enrich = enrich
+class EnrichmentResourceWithRawResponse:
+    def __init__(self, enrichment: EnrichmentResource) -> None:
+        self._enrichment = enrichment
 
         self.create = to_raw_response_wrapper(
-            enrich.create,
+            enrichment.create,
         )
 
 
-class AsyncEnrichResourceWithRawResponse:
-    def __init__(self, enrich: AsyncEnrichResource) -> None:
-        self._enrich = enrich
+class AsyncEnrichmentResourceWithRawResponse:
+    def __init__(self, enrichment: AsyncEnrichmentResource) -> None:
+        self._enrichment = enrichment
 
         self.create = async_to_raw_response_wrapper(
-            enrich.create,
+            enrichment.create,
         )
 
 
-class EnrichResourceWithStreamingResponse:
-    def __init__(self, enrich: EnrichResource) -> None:
-        self._enrich = enrich
+class EnrichmentResourceWithStreamingResponse:
+    def __init__(self, enrichment: EnrichmentResource) -> None:
+        self._enrichment = enrichment
 
         self.create = to_streamed_response_wrapper(
-            enrich.create,
+            enrichment.create,
         )
 
 
-class AsyncEnrichResourceWithStreamingResponse:
-    def __init__(self, enrich: AsyncEnrichResource) -> None:
-        self._enrich = enrich
+class AsyncEnrichmentResourceWithStreamingResponse:
+    def __init__(self, enrichment: AsyncEnrichmentResource) -> None:
+        self._enrichment = enrichment
 
         self.create = async_to_streamed_response_wrapper(
-            enrich.create,
+            enrichment.create,
         )
