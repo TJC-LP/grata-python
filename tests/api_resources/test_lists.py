@@ -10,8 +10,8 @@ import pytest
 from grata import Grata, AsyncGrata
 from grata.types import (
     List,
-    ListListResponse,
-    ListCompaniesResponse,
+    ListResponse,
+    SearchListResponse,
 )
 from tests.utils import assert_matches_type
 
@@ -135,7 +135,7 @@ class TestLists:
     @parametrize
     def test_method_list(self, client: Grata) -> None:
         list_ = client.lists.list()
-        assert_matches_type(ListListResponse, list_, path=["response"])
+        assert_matches_type(SearchListResponse, list_, path=["response"])
 
     @parametrize
     def test_method_list_with_all_params(self, client: Grata) -> None:
@@ -143,7 +143,7 @@ class TestLists:
             name="List A",
             page=2,
         )
-        assert_matches_type(ListListResponse, list_, path=["response"])
+        assert_matches_type(SearchListResponse, list_, path=["response"])
 
     @parametrize
     def test_raw_response_list(self, client: Grata) -> None:
@@ -152,7 +152,7 @@ class TestLists:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         list_ = response.parse()
-        assert_matches_type(ListListResponse, list_, path=["response"])
+        assert_matches_type(SearchListResponse, list_, path=["response"])
 
     @parametrize
     def test_streaming_response_list(self, client: Grata) -> None:
@@ -161,7 +161,7 @@ class TestLists:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             list_ = response.parse()
-            assert_matches_type(ListListResponse, list_, path=["response"])
+            assert_matches_type(SearchListResponse, list_, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -209,7 +209,7 @@ class TestLists:
             list_uid="list_uid",
             action="add",
         )
-        assert_matches_type(ListCompaniesResponse, list_, path=["response"])
+        assert_matches_type(ListResponse, list_, path=["response"])
 
     @parametrize
     def test_method_companies_with_all_params(self, client: Grata) -> None:
@@ -219,7 +219,7 @@ class TestLists:
             domains=["grata.com"],
             uids=["A4Q67R3Z"],
         )
-        assert_matches_type(ListCompaniesResponse, list_, path=["response"])
+        assert_matches_type(ListResponse, list_, path=["response"])
 
     @parametrize
     def test_raw_response_companies(self, client: Grata) -> None:
@@ -231,7 +231,7 @@ class TestLists:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         list_ = response.parse()
-        assert_matches_type(ListCompaniesResponse, list_, path=["response"])
+        assert_matches_type(ListResponse, list_, path=["response"])
 
     @parametrize
     def test_streaming_response_companies(self, client: Grata) -> None:
@@ -243,7 +243,7 @@ class TestLists:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             list_ = response.parse()
-            assert_matches_type(ListCompaniesResponse, list_, path=["response"])
+            assert_matches_type(ListResponse, list_, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -373,7 +373,7 @@ class TestAsyncLists:
     @parametrize
     async def test_method_list(self, async_client: AsyncGrata) -> None:
         list_ = await async_client.lists.list()
-        assert_matches_type(ListListResponse, list_, path=["response"])
+        assert_matches_type(SearchListResponse, list_, path=["response"])
 
     @parametrize
     async def test_method_list_with_all_params(self, async_client: AsyncGrata) -> None:
@@ -381,7 +381,7 @@ class TestAsyncLists:
             name="List A",
             page=2,
         )
-        assert_matches_type(ListListResponse, list_, path=["response"])
+        assert_matches_type(SearchListResponse, list_, path=["response"])
 
     @parametrize
     async def test_raw_response_list(self, async_client: AsyncGrata) -> None:
@@ -390,7 +390,7 @@ class TestAsyncLists:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         list_ = await response.parse()
-        assert_matches_type(ListListResponse, list_, path=["response"])
+        assert_matches_type(SearchListResponse, list_, path=["response"])
 
     @parametrize
     async def test_streaming_response_list(self, async_client: AsyncGrata) -> None:
@@ -399,7 +399,7 @@ class TestAsyncLists:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             list_ = await response.parse()
-            assert_matches_type(ListListResponse, list_, path=["response"])
+            assert_matches_type(SearchListResponse, list_, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -447,7 +447,7 @@ class TestAsyncLists:
             list_uid="list_uid",
             action="add",
         )
-        assert_matches_type(ListCompaniesResponse, list_, path=["response"])
+        assert_matches_type(ListResponse, list_, path=["response"])
 
     @parametrize
     async def test_method_companies_with_all_params(self, async_client: AsyncGrata) -> None:
@@ -457,7 +457,7 @@ class TestAsyncLists:
             domains=["grata.com"],
             uids=["A4Q67R3Z"],
         )
-        assert_matches_type(ListCompaniesResponse, list_, path=["response"])
+        assert_matches_type(ListResponse, list_, path=["response"])
 
     @parametrize
     async def test_raw_response_companies(self, async_client: AsyncGrata) -> None:
@@ -469,7 +469,7 @@ class TestAsyncLists:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         list_ = await response.parse()
-        assert_matches_type(ListCompaniesResponse, list_, path=["response"])
+        assert_matches_type(ListResponse, list_, path=["response"])
 
     @parametrize
     async def test_streaming_response_companies(self, async_client: AsyncGrata) -> None:
@@ -481,7 +481,7 @@ class TestAsyncLists:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             list_ = await response.parse()
-            assert_matches_type(ListCompaniesResponse, list_, path=["response"])
+            assert_matches_type(ListResponse, list_, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 

@@ -5,10 +5,10 @@ from typing import List
 from .company import Company
 from .._models import BaseModel
 
-__all__ = ["SearchSearchSimilarResponse"]
+__all__ = ["SimilarSearchResponse"]
 
 
-class SearchSearchSimilarResponse(BaseModel):
+class SimilarSearchResponse(BaseModel):
     company: Company
 
     count: int

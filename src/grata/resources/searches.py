@@ -22,8 +22,8 @@ from .._response import (
     async_to_streamed_response_wrapper,
 )
 from .._base_client import make_request_options
-from ..types.search_search_response import SearchSearchResponse
-from ..types.search_search_similar_response import SearchSearchSimilarResponse
+from ..types.search_response import SearchResponse
+from ..types.similar_search_response import SimilarSearchResponse
 
 __all__ = ["SearchesResource", "AsyncSearchesResource"]
 
@@ -138,7 +138,7 @@ class SearchesResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> SearchSearchResponse:
+    ) -> SearchResponse:
         """
         Returns Grata-powered search results based on an input search query.
 
@@ -187,7 +187,7 @@ class SearchesResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=SearchSearchResponse,
+            cast_to=SearchResponse,
         )
 
     def search_similar(
@@ -282,7 +282,7 @@ class SearchesResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> SearchSearchSimilarResponse:
+    ) -> SimilarSearchResponse:
         """
         Returns companies similar to the specified company.
 
@@ -337,7 +337,7 @@ class SearchesResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=SearchSearchSimilarResponse,
+            cast_to=SimilarSearchResponse,
         )
 
 
@@ -451,7 +451,7 @@ class AsyncSearchesResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> SearchSearchResponse:
+    ) -> SearchResponse:
         """
         Returns Grata-powered search results based on an input search query.
 
@@ -500,7 +500,7 @@ class AsyncSearchesResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=SearchSearchResponse,
+            cast_to=SearchResponse,
         )
 
     async def search_similar(
@@ -595,7 +595,7 @@ class AsyncSearchesResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> SearchSearchSimilarResponse:
+    ) -> SimilarSearchResponse:
         """
         Returns companies similar to the specified company.
 
@@ -650,7 +650,7 @@ class AsyncSearchesResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=SearchSearchSimilarResponse,
+            cast_to=SimilarSearchResponse,
         )
 
 

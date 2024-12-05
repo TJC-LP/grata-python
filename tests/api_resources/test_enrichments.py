@@ -8,7 +8,7 @@ from typing import Any, cast
 import pytest
 
 from grata import Grata, AsyncGrata
-from grata.types import Company, EnrichmentBulkEnrichResponse
+from grata.types import Company, BulkEnrichResponse
 from tests.utils import assert_matches_type
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
@@ -23,7 +23,7 @@ class TestEnrichments:
             company_uids=["GAGRYBUR", "UFFY5AZY"],
             domains=["grata.com", "slack.com"],
         )
-        assert_matches_type(EnrichmentBulkEnrichResponse, enrichment, path=["response"])
+        assert_matches_type(BulkEnrichResponse, enrichment, path=["response"])
 
     @parametrize
     def test_raw_response_bulk_enrich(self, client: Grata) -> None:
@@ -35,7 +35,7 @@ class TestEnrichments:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         enrichment = response.parse()
-        assert_matches_type(EnrichmentBulkEnrichResponse, enrichment, path=["response"])
+        assert_matches_type(BulkEnrichResponse, enrichment, path=["response"])
 
     @parametrize
     def test_streaming_response_bulk_enrich(self, client: Grata) -> None:
@@ -47,7 +47,7 @@ class TestEnrichments:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             enrichment = response.parse()
-            assert_matches_type(EnrichmentBulkEnrichResponse, enrichment, path=["response"])
+            assert_matches_type(BulkEnrichResponse, enrichment, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -100,7 +100,7 @@ class TestAsyncEnrichments:
             company_uids=["GAGRYBUR", "UFFY5AZY"],
             domains=["grata.com", "slack.com"],
         )
-        assert_matches_type(EnrichmentBulkEnrichResponse, enrichment, path=["response"])
+        assert_matches_type(BulkEnrichResponse, enrichment, path=["response"])
 
     @parametrize
     async def test_raw_response_bulk_enrich(self, async_client: AsyncGrata) -> None:
@@ -112,7 +112,7 @@ class TestAsyncEnrichments:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         enrichment = await response.parse()
-        assert_matches_type(EnrichmentBulkEnrichResponse, enrichment, path=["response"])
+        assert_matches_type(BulkEnrichResponse, enrichment, path=["response"])
 
     @parametrize
     async def test_streaming_response_bulk_enrich(self, async_client: AsyncGrata) -> None:
@@ -124,7 +124,7 @@ class TestAsyncEnrichments:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             enrichment = await response.parse()
-            assert_matches_type(EnrichmentBulkEnrichResponse, enrichment, path=["response"])
+            assert_matches_type(BulkEnrichResponse, enrichment, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
