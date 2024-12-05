@@ -7,7 +7,7 @@ from typing_extensions import Literal
 
 import httpx
 
-from ..types import search_create_params, search_similar_params
+from ..types import search_search_params, search_search_similar_params
 from .._types import NOT_GIVEN, Body, Query, Headers, NotGiven
 from .._utils import (
     maybe_transform,
@@ -22,32 +22,33 @@ from .._response import (
     async_to_streamed_response_wrapper,
 )
 from .._base_client import make_request_options
-from ..types.company_basic import CompanyBasic
+from ..types.search_response import SearchResponse
+from ..types.similar_search_response import SimilarSearchResponse
 
-__all__ = ["SearchResource", "AsyncSearchResource"]
+__all__ = ["SearchesResource", "AsyncSearchesResource"]
 
 
-class SearchResource(SyncAPIResource):
+class SearchesResource(SyncAPIResource):
     @cached_property
-    def with_raw_response(self) -> SearchResourceWithRawResponse:
+    def with_raw_response(self) -> SearchesResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return the
         the raw response object instead of the parsed content.
 
         For more information, see https://www.github.com/TJC-LP/grata-python#accessing-raw-response-data-eg-headers
         """
-        return SearchResourceWithRawResponse(self)
+        return SearchesResourceWithRawResponse(self)
 
     @cached_property
-    def with_streaming_response(self) -> SearchResourceWithStreamingResponse:
+    def with_streaming_response(self) -> SearchesResourceWithStreamingResponse:
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
         For more information, see https://www.github.com/TJC-LP/grata-python#with_streaming_response
         """
-        return SearchResourceWithStreamingResponse(self)
+        return SearchesResourceWithStreamingResponse(self)
 
-    def create(
+    def search(
         self,
         *,
         business_models: List[
@@ -78,8 +79,6 @@ class SearchResource(SyncAPIResource):
             ]
         ]
         | NotGiven = NOT_GIVEN,
-        company_uid: str | NotGiven = NOT_GIVEN,
-        domain: str | NotGiven = NOT_GIVEN,
         employees_change: Iterable[float] | NotGiven = NOT_GIVEN,
         employees_change_time: Literal["month", "quarter", "six_month", "annual"] | NotGiven = NOT_GIVEN,
         employees_on_professional_networks_range: Iterable[float] | NotGiven = NOT_GIVEN,
@@ -112,10 +111,11 @@ class SearchResource(SyncAPIResource):
         ]
         | NotGiven = NOT_GIVEN,
         grata_employees_estimates_range: Iterable[float] | NotGiven = NOT_GIVEN,
-        headquarters: search_create_params.Headquarters | NotGiven = NOT_GIVEN,
-        industry_classifications: search_create_params.IndustryClassifications | NotGiven = NOT_GIVEN,
+        group_operator: Literal["any", "all"] | NotGiven = NOT_GIVEN,
+        headquarters: search_search_params.Headquarters | NotGiven = NOT_GIVEN,
+        industry_classifications: search_search_params.IndustryClassifications | NotGiven = NOT_GIVEN,
         is_funded: bool | NotGiven = NOT_GIVEN,
-        lists: search_create_params.Lists | NotGiven = NOT_GIVEN,
+        lists: search_search_params.Lists | NotGiven = NOT_GIVEN,
         ownership: List[
             Literal[
                 "bootstrapped",
@@ -130,7 +130,7 @@ class SearchResource(SyncAPIResource):
         | NotGiven = NOT_GIVEN,
         page_token: str | NotGiven = NOT_GIVEN,
         terms_exclude: List[str] | NotGiven = NOT_GIVEN,
-        terms_include: search_create_params.TermsInclude | NotGiven = NOT_GIVEN,
+        terms_include: search_search_params.TermsInclude | NotGiven = NOT_GIVEN,
         year_founded: Iterable[float] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -138,59 +138,18 @@ class SearchResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> CompanyBasic:
-        """Returns Grata-powered search results based on an input search query.
-
-        If you're
-        using any of the filters in the UI that are not presented below, the results may
-        differ.
+    ) -> SearchResponse:
+        """
+        Returns Grata-powered search results based on an input search query.
 
         Args:
-          business_models: Business models to search on.
+          industry_classifications: Industry classification codes.
 
-          company_uid: Alphanumeric Grata ID for the company (case-sensitive).
+          is_funded: Indicates whether the company has received outside funding.
 
-          domain: Domain of the company for similar search. Protocol and path can be included. If
-              both the domain and company_uid are specified, domain will be referenced.
+          lists: Grata list IDs to search within.
 
-          employees_change: Range of % employee growth.
-
-          employees_change_time: The interval for employee growth rate.
-
-          employees_on_professional_networks_range: The range of employee counts listed on professional networks. Inputting 100,001
-              as the maximum value will search for all employee sizes above the minimum.
-              [100,100001] will search for all companies with 100 or more employees
-
-          end_customer: End vertical that the company sells to.
-
-          funding_size: Range of funding the company has received in USD. Ranges can only start and
-              begin with the following values: 0, 5000000, 10000000, 20000000, 50000000,
-              100000000, 200000000, 500000000, 500000001. 500000001 equates to maximum.
-
-          grata_employees_estimates_range: The range of employee counts based on Grata Employee estimates. Inputting
-              100,001 as the maximum value will search for all employee sizes above the
-              minimum. [100,100001] will search for all companies with 100 or more employees
-
-          headquarters: Headquarter locations supports all countries and US city/states. State cannot be
-              left blank if city is populated. Country cannot be other than United States if
-              searching for city/state.
-
-          industry_classifications: Industry classification code for the company. Pass the industry NAICS code or
-              Grata's specific software industry code listed in the mapping doc -
-              https://grata.stoplight.io/docs/grata/branches/v1.3/42ptq2xej8i5j-software-industry-code-mapping
-
-          is_funded: Indicates whether or not the company has received outside funding.
-
-          lists: Grata list IDs to search within. Default logic for include is "or", default
-              logic for exclude is "and."
-
-          ownership: Ownership types to search and sort on.
-
-          terms_exclude: Keywords to exclude from the search.
-
-          terms_include: String used for keyword search. This is an array of keywords
-
-          year_founded: Range of founding years.
+          page_token: Page token used for pagination.
 
           extra_headers: Send extra headers
 
@@ -205,8 +164,6 @@ class SearchResource(SyncAPIResource):
             body=maybe_transform(
                 {
                     "business_models": business_models,
-                    "company_uid": company_uid,
-                    "domain": domain,
                     "employees_change": employees_change,
                     "employees_change_time": employees_change_time,
                     "employees_on_professional_networks_range": employees_on_professional_networks_range,
@@ -214,6 +171,7 @@ class SearchResource(SyncAPIResource):
                     "funding_size": funding_size,
                     "funding_stage": funding_stage,
                     "grata_employees_estimates_range": grata_employees_estimates_range,
+                    "group_operator": group_operator,
                     "headquarters": headquarters,
                     "industry_classifications": industry_classifications,
                     "is_funded": is_funded,
@@ -224,15 +182,15 @@ class SearchResource(SyncAPIResource):
                     "terms_include": terms_include,
                     "year_founded": year_founded,
                 },
-                search_create_params.SearchCreateParams,
+                search_search_params.SearchSearchParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=CompanyBasic,
+            cast_to=SearchResponse,
         )
 
-    def similar(
+    def search_similar(
         self,
         *,
         business_models: List[
@@ -297,10 +255,11 @@ class SearchResource(SyncAPIResource):
         ]
         | NotGiven = NOT_GIVEN,
         grata_employees_estimates_range: Iterable[float] | NotGiven = NOT_GIVEN,
-        headquarters: search_similar_params.Headquarters | NotGiven = NOT_GIVEN,
-        industry_classifications: search_similar_params.IndustryClassifications | NotGiven = NOT_GIVEN,
+        group_operator: Literal["any", "all"] | NotGiven = NOT_GIVEN,
+        headquarters: search_search_similar_params.Headquarters | NotGiven = NOT_GIVEN,
+        industry_classifications: search_search_similar_params.IndustryClassifications | NotGiven = NOT_GIVEN,
         is_funded: bool | NotGiven = NOT_GIVEN,
-        lists: search_similar_params.Lists | NotGiven = NOT_GIVEN,
+        lists: search_search_similar_params.Lists | NotGiven = NOT_GIVEN,
         ownership: List[
             Literal[
                 "bootstrapped",
@@ -315,7 +274,7 @@ class SearchResource(SyncAPIResource):
         | NotGiven = NOT_GIVEN,
         page_token: str | NotGiven = NOT_GIVEN,
         terms_exclude: List[str] | NotGiven = NOT_GIVEN,
-        terms_include: search_similar_params.TermsInclude | NotGiven = NOT_GIVEN,
+        terms_include: search_search_similar_params.TermsInclude | NotGiven = NOT_GIVEN,
         year_founded: Iterable[float] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -323,59 +282,22 @@ class SearchResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> CompanyBasic:
-        """Returns Grata-powered search results based on an input search query.
-
-        If you're
-        using any of the filters in the UI that are not presented below, the results may
-        differ.
+    ) -> SimilarSearchResponse:
+        """
+        Returns companies similar to the specified company.
 
         Args:
-          business_models: Business models to search on.
-
           company_uid: Alphanumeric Grata ID for the company (case-sensitive).
 
-          domain: Domain of the company for similar search. Protocol and path can be included. If
-              both the domain and company_uid are specified, domain will be referenced.
+          domain: Domain of the company for similar search.
 
-          employees_change: Range of % employee growth.
+          industry_classifications: Industry classification codes.
 
-          employees_change_time: The interval for employee growth rate.
+          is_funded: Indicates whether the company has received outside funding.
 
-          employees_on_professional_networks_range: The range of employee counts listed on professional networks. Inputting 100,001
-              as the maximum value will search for all employee sizes above the minimum.
-              [100,100001] will search for all companies with 100 or more employees
+          lists: Grata list IDs to search within.
 
-          end_customer: End vertical that the company sells to.
-
-          funding_size: Range of funding the company has received in USD. Ranges can only start and
-              begin with the following values: 0, 5000000, 10000000, 20000000, 50000000,
-              100000000, 200000000, 500000000, 500000001. 500000001 equates to maximum.
-
-          grata_employees_estimates_range: The range of employee counts based on Grata Employee estimates. Inputting
-              100,001 as the maximum value will search for all employee sizes above the
-              minimum. [100,100001] will search for all companies with 100 or more employees
-
-          headquarters: Headquarter locations supports all countries and US city/states. State cannot be
-              left blank if city is populated. Country cannot be other than United States if
-              searching for city/state.
-
-          industry_classifications: Industry classification code for the company. Pass the industry NAICS code or
-              Grata's specific software industry code listed in the mapping doc -
-              https://grata.stoplight.io/docs/grata/branches/v1.3/42ptq2xej8i5j-software-industry-code-mapping
-
-          is_funded: Indicates whether or not the company has received outside funding.
-
-          lists: Grata list IDs to search within. Default logic for include is "or", default
-              logic for exclude is "and."
-
-          ownership: Ownership types to search and sort on.
-
-          terms_exclude: Keywords to exclude from the search.
-
-          terms_include: String used for keyword search. This is an array of keywords
-
-          year_founded: Range of founding years.
+          page_token: Page token used for pagination.
 
           extra_headers: Send extra headers
 
@@ -399,6 +321,7 @@ class SearchResource(SyncAPIResource):
                     "funding_size": funding_size,
                     "funding_stage": funding_stage,
                     "grata_employees_estimates_range": grata_employees_estimates_range,
+                    "group_operator": group_operator,
                     "headquarters": headquarters,
                     "industry_classifications": industry_classifications,
                     "is_funded": is_funded,
@@ -409,36 +332,36 @@ class SearchResource(SyncAPIResource):
                     "terms_include": terms_include,
                     "year_founded": year_founded,
                 },
-                search_similar_params.SearchSimilarParams,
+                search_search_similar_params.SearchSearchSimilarParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=CompanyBasic,
+            cast_to=SimilarSearchResponse,
         )
 
 
-class AsyncSearchResource(AsyncAPIResource):
+class AsyncSearchesResource(AsyncAPIResource):
     @cached_property
-    def with_raw_response(self) -> AsyncSearchResourceWithRawResponse:
+    def with_raw_response(self) -> AsyncSearchesResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return the
         the raw response object instead of the parsed content.
 
         For more information, see https://www.github.com/TJC-LP/grata-python#accessing-raw-response-data-eg-headers
         """
-        return AsyncSearchResourceWithRawResponse(self)
+        return AsyncSearchesResourceWithRawResponse(self)
 
     @cached_property
-    def with_streaming_response(self) -> AsyncSearchResourceWithStreamingResponse:
+    def with_streaming_response(self) -> AsyncSearchesResourceWithStreamingResponse:
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
         For more information, see https://www.github.com/TJC-LP/grata-python#with_streaming_response
         """
-        return AsyncSearchResourceWithStreamingResponse(self)
+        return AsyncSearchesResourceWithStreamingResponse(self)
 
-    async def create(
+    async def search(
         self,
         *,
         business_models: List[
@@ -469,8 +392,6 @@ class AsyncSearchResource(AsyncAPIResource):
             ]
         ]
         | NotGiven = NOT_GIVEN,
-        company_uid: str | NotGiven = NOT_GIVEN,
-        domain: str | NotGiven = NOT_GIVEN,
         employees_change: Iterable[float] | NotGiven = NOT_GIVEN,
         employees_change_time: Literal["month", "quarter", "six_month", "annual"] | NotGiven = NOT_GIVEN,
         employees_on_professional_networks_range: Iterable[float] | NotGiven = NOT_GIVEN,
@@ -503,10 +424,11 @@ class AsyncSearchResource(AsyncAPIResource):
         ]
         | NotGiven = NOT_GIVEN,
         grata_employees_estimates_range: Iterable[float] | NotGiven = NOT_GIVEN,
-        headquarters: search_create_params.Headquarters | NotGiven = NOT_GIVEN,
-        industry_classifications: search_create_params.IndustryClassifications | NotGiven = NOT_GIVEN,
+        group_operator: Literal["any", "all"] | NotGiven = NOT_GIVEN,
+        headquarters: search_search_params.Headquarters | NotGiven = NOT_GIVEN,
+        industry_classifications: search_search_params.IndustryClassifications | NotGiven = NOT_GIVEN,
         is_funded: bool | NotGiven = NOT_GIVEN,
-        lists: search_create_params.Lists | NotGiven = NOT_GIVEN,
+        lists: search_search_params.Lists | NotGiven = NOT_GIVEN,
         ownership: List[
             Literal[
                 "bootstrapped",
@@ -521,7 +443,7 @@ class AsyncSearchResource(AsyncAPIResource):
         | NotGiven = NOT_GIVEN,
         page_token: str | NotGiven = NOT_GIVEN,
         terms_exclude: List[str] | NotGiven = NOT_GIVEN,
-        terms_include: search_create_params.TermsInclude | NotGiven = NOT_GIVEN,
+        terms_include: search_search_params.TermsInclude | NotGiven = NOT_GIVEN,
         year_founded: Iterable[float] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -529,59 +451,18 @@ class AsyncSearchResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> CompanyBasic:
-        """Returns Grata-powered search results based on an input search query.
-
-        If you're
-        using any of the filters in the UI that are not presented below, the results may
-        differ.
+    ) -> SearchResponse:
+        """
+        Returns Grata-powered search results based on an input search query.
 
         Args:
-          business_models: Business models to search on.
+          industry_classifications: Industry classification codes.
 
-          company_uid: Alphanumeric Grata ID for the company (case-sensitive).
+          is_funded: Indicates whether the company has received outside funding.
 
-          domain: Domain of the company for similar search. Protocol and path can be included. If
-              both the domain and company_uid are specified, domain will be referenced.
+          lists: Grata list IDs to search within.
 
-          employees_change: Range of % employee growth.
-
-          employees_change_time: The interval for employee growth rate.
-
-          employees_on_professional_networks_range: The range of employee counts listed on professional networks. Inputting 100,001
-              as the maximum value will search for all employee sizes above the minimum.
-              [100,100001] will search for all companies with 100 or more employees
-
-          end_customer: End vertical that the company sells to.
-
-          funding_size: Range of funding the company has received in USD. Ranges can only start and
-              begin with the following values: 0, 5000000, 10000000, 20000000, 50000000,
-              100000000, 200000000, 500000000, 500000001. 500000001 equates to maximum.
-
-          grata_employees_estimates_range: The range of employee counts based on Grata Employee estimates. Inputting
-              100,001 as the maximum value will search for all employee sizes above the
-              minimum. [100,100001] will search for all companies with 100 or more employees
-
-          headquarters: Headquarter locations supports all countries and US city/states. State cannot be
-              left blank if city is populated. Country cannot be other than United States if
-              searching for city/state.
-
-          industry_classifications: Industry classification code for the company. Pass the industry NAICS code or
-              Grata's specific software industry code listed in the mapping doc -
-              https://grata.stoplight.io/docs/grata/branches/v1.3/42ptq2xej8i5j-software-industry-code-mapping
-
-          is_funded: Indicates whether or not the company has received outside funding.
-
-          lists: Grata list IDs to search within. Default logic for include is "or", default
-              logic for exclude is "and."
-
-          ownership: Ownership types to search and sort on.
-
-          terms_exclude: Keywords to exclude from the search.
-
-          terms_include: String used for keyword search. This is an array of keywords
-
-          year_founded: Range of founding years.
+          page_token: Page token used for pagination.
 
           extra_headers: Send extra headers
 
@@ -596,8 +477,6 @@ class AsyncSearchResource(AsyncAPIResource):
             body=await async_maybe_transform(
                 {
                     "business_models": business_models,
-                    "company_uid": company_uid,
-                    "domain": domain,
                     "employees_change": employees_change,
                     "employees_change_time": employees_change_time,
                     "employees_on_professional_networks_range": employees_on_professional_networks_range,
@@ -605,6 +484,7 @@ class AsyncSearchResource(AsyncAPIResource):
                     "funding_size": funding_size,
                     "funding_stage": funding_stage,
                     "grata_employees_estimates_range": grata_employees_estimates_range,
+                    "group_operator": group_operator,
                     "headquarters": headquarters,
                     "industry_classifications": industry_classifications,
                     "is_funded": is_funded,
@@ -615,15 +495,15 @@ class AsyncSearchResource(AsyncAPIResource):
                     "terms_include": terms_include,
                     "year_founded": year_founded,
                 },
-                search_create_params.SearchCreateParams,
+                search_search_params.SearchSearchParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=CompanyBasic,
+            cast_to=SearchResponse,
         )
 
-    async def similar(
+    async def search_similar(
         self,
         *,
         business_models: List[
@@ -688,10 +568,11 @@ class AsyncSearchResource(AsyncAPIResource):
         ]
         | NotGiven = NOT_GIVEN,
         grata_employees_estimates_range: Iterable[float] | NotGiven = NOT_GIVEN,
-        headquarters: search_similar_params.Headquarters | NotGiven = NOT_GIVEN,
-        industry_classifications: search_similar_params.IndustryClassifications | NotGiven = NOT_GIVEN,
+        group_operator: Literal["any", "all"] | NotGiven = NOT_GIVEN,
+        headquarters: search_search_similar_params.Headquarters | NotGiven = NOT_GIVEN,
+        industry_classifications: search_search_similar_params.IndustryClassifications | NotGiven = NOT_GIVEN,
         is_funded: bool | NotGiven = NOT_GIVEN,
-        lists: search_similar_params.Lists | NotGiven = NOT_GIVEN,
+        lists: search_search_similar_params.Lists | NotGiven = NOT_GIVEN,
         ownership: List[
             Literal[
                 "bootstrapped",
@@ -706,7 +587,7 @@ class AsyncSearchResource(AsyncAPIResource):
         | NotGiven = NOT_GIVEN,
         page_token: str | NotGiven = NOT_GIVEN,
         terms_exclude: List[str] | NotGiven = NOT_GIVEN,
-        terms_include: search_similar_params.TermsInclude | NotGiven = NOT_GIVEN,
+        terms_include: search_search_similar_params.TermsInclude | NotGiven = NOT_GIVEN,
         year_founded: Iterable[float] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -714,59 +595,22 @@ class AsyncSearchResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> CompanyBasic:
-        """Returns Grata-powered search results based on an input search query.
-
-        If you're
-        using any of the filters in the UI that are not presented below, the results may
-        differ.
+    ) -> SimilarSearchResponse:
+        """
+        Returns companies similar to the specified company.
 
         Args:
-          business_models: Business models to search on.
-
           company_uid: Alphanumeric Grata ID for the company (case-sensitive).
 
-          domain: Domain of the company for similar search. Protocol and path can be included. If
-              both the domain and company_uid are specified, domain will be referenced.
+          domain: Domain of the company for similar search.
 
-          employees_change: Range of % employee growth.
+          industry_classifications: Industry classification codes.
 
-          employees_change_time: The interval for employee growth rate.
+          is_funded: Indicates whether the company has received outside funding.
 
-          employees_on_professional_networks_range: The range of employee counts listed on professional networks. Inputting 100,001
-              as the maximum value will search for all employee sizes above the minimum.
-              [100,100001] will search for all companies with 100 or more employees
+          lists: Grata list IDs to search within.
 
-          end_customer: End vertical that the company sells to.
-
-          funding_size: Range of funding the company has received in USD. Ranges can only start and
-              begin with the following values: 0, 5000000, 10000000, 20000000, 50000000,
-              100000000, 200000000, 500000000, 500000001. 500000001 equates to maximum.
-
-          grata_employees_estimates_range: The range of employee counts based on Grata Employee estimates. Inputting
-              100,001 as the maximum value will search for all employee sizes above the
-              minimum. [100,100001] will search for all companies with 100 or more employees
-
-          headquarters: Headquarter locations supports all countries and US city/states. State cannot be
-              left blank if city is populated. Country cannot be other than United States if
-              searching for city/state.
-
-          industry_classifications: Industry classification code for the company. Pass the industry NAICS code or
-              Grata's specific software industry code listed in the mapping doc -
-              https://grata.stoplight.io/docs/grata/branches/v1.3/42ptq2xej8i5j-software-industry-code-mapping
-
-          is_funded: Indicates whether or not the company has received outside funding.
-
-          lists: Grata list IDs to search within. Default logic for include is "or", default
-              logic for exclude is "and."
-
-          ownership: Ownership types to search and sort on.
-
-          terms_exclude: Keywords to exclude from the search.
-
-          terms_include: String used for keyword search. This is an array of keywords
-
-          year_founded: Range of founding years.
+          page_token: Page token used for pagination.
 
           extra_headers: Send extra headers
 
@@ -790,6 +634,7 @@ class AsyncSearchResource(AsyncAPIResource):
                     "funding_size": funding_size,
                     "funding_stage": funding_stage,
                     "grata_employees_estimates_range": grata_employees_estimates_range,
+                    "group_operator": group_operator,
                     "headquarters": headquarters,
                     "industry_classifications": industry_classifications,
                     "is_funded": is_funded,
@@ -800,58 +645,58 @@ class AsyncSearchResource(AsyncAPIResource):
                     "terms_include": terms_include,
                     "year_founded": year_founded,
                 },
-                search_similar_params.SearchSimilarParams,
+                search_search_similar_params.SearchSearchSimilarParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=CompanyBasic,
+            cast_to=SimilarSearchResponse,
         )
 
 
-class SearchResourceWithRawResponse:
-    def __init__(self, search: SearchResource) -> None:
-        self._search = search
+class SearchesResourceWithRawResponse:
+    def __init__(self, searches: SearchesResource) -> None:
+        self._searches = searches
 
-        self.create = to_raw_response_wrapper(
-            search.create,
+        self.search = to_raw_response_wrapper(
+            searches.search,
         )
-        self.similar = to_raw_response_wrapper(
-            search.similar,
-        )
-
-
-class AsyncSearchResourceWithRawResponse:
-    def __init__(self, search: AsyncSearchResource) -> None:
-        self._search = search
-
-        self.create = async_to_raw_response_wrapper(
-            search.create,
-        )
-        self.similar = async_to_raw_response_wrapper(
-            search.similar,
+        self.search_similar = to_raw_response_wrapper(
+            searches.search_similar,
         )
 
 
-class SearchResourceWithStreamingResponse:
-    def __init__(self, search: SearchResource) -> None:
-        self._search = search
+class AsyncSearchesResourceWithRawResponse:
+    def __init__(self, searches: AsyncSearchesResource) -> None:
+        self._searches = searches
 
-        self.create = to_streamed_response_wrapper(
-            search.create,
+        self.search = async_to_raw_response_wrapper(
+            searches.search,
         )
-        self.similar = to_streamed_response_wrapper(
-            search.similar,
+        self.search_similar = async_to_raw_response_wrapper(
+            searches.search_similar,
         )
 
 
-class AsyncSearchResourceWithStreamingResponse:
-    def __init__(self, search: AsyncSearchResource) -> None:
-        self._search = search
+class SearchesResourceWithStreamingResponse:
+    def __init__(self, searches: SearchesResource) -> None:
+        self._searches = searches
 
-        self.create = async_to_streamed_response_wrapper(
-            search.create,
+        self.search = to_streamed_response_wrapper(
+            searches.search,
         )
-        self.similar = async_to_streamed_response_wrapper(
-            search.similar,
+        self.search_similar = to_streamed_response_wrapper(
+            searches.search_similar,
+        )
+
+
+class AsyncSearchesResourceWithStreamingResponse:
+    def __init__(self, searches: AsyncSearchesResource) -> None:
+        self._searches = searches
+
+        self.search = async_to_streamed_response_wrapper(
+            searches.search,
+        )
+        self.search_similar = async_to_streamed_response_wrapper(
+            searches.search_similar,
         )

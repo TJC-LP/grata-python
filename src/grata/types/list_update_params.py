@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
-from typing_extensions import TypedDict
+from typing_extensions import Required, TypedDict
 
 __all__ = ["ListUpdateParams"]
 
 
 class ListUpdateParams(TypedDict, total=False):
-    name: str
+    name: Required[str]
+    """New name of the list."""

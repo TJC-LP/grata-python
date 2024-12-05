@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
-from typing import List, Iterable, Optional
+from typing import List, Iterable
 from typing_extensions import Literal, TypedDict
 
 __all__ = [
-    "SearchSimilarParams",
+    "SearchSearchParams",
     "Headquarters",
     "HeadquartersExclude",
     "HeadquartersInclude",
@@ -17,7 +17,7 @@ __all__ = [
 ]
 
 
-class SearchSimilarParams(TypedDict, total=False):
+class SearchSearchParams(TypedDict, total=False):
     business_models: List[
         Literal[
             "software",
@@ -45,31 +45,12 @@ class SearchSimilarParams(TypedDict, total=False):
             "religious_institutions",
         ]
     ]
-    """Business models to search on."""
-
-    company_uid: str
-    """Alphanumeric Grata ID for the company (case-sensitive)."""
-
-    domain: str
-    """Domain of the company for similar search.
-
-    Protocol and path can be included. If both the domain and company_uid are
-    specified, domain will be referenced.
-    """
 
     employees_change: Iterable[float]
-    """Range of % employee growth."""
 
     employees_change_time: Literal["month", "quarter", "six_month", "annual"]
-    """The interval for employee growth rate."""
 
     employees_on_professional_networks_range: Iterable[float]
-    """The range of employee counts listed on professional networks.
-
-    Inputting 100,001 as the maximum value will search for all employee sizes above
-    the minimum. [100,100001] will search for all companies with 100 or more
-    employees
-    """
 
     end_customer: List[
         Literal[
@@ -91,15 +72,8 @@ class SearchSimilarParams(TypedDict, total=False):
             "consumer_product_and_retail",
         ]
     ]
-    """End vertical that the company sells to."""
 
     funding_size: Iterable[float]
-    """Range of funding the company has received in USD.
-
-    Ranges can only start and begin with the following values: 0, 5000000, 10000000,
-    20000000, 50000000, 100000000, 200000000, 500000000, 500000001. 500000001
-    equates to maximum.
-    """
 
     funding_stage: List[
         Literal[
@@ -108,36 +82,19 @@ class SearchSimilarParams(TypedDict, total=False):
     ]
 
     grata_employees_estimates_range: Iterable[float]
-    """The range of employee counts based on Grata Employee estimates.
 
-    Inputting 100,001 as the maximum value will search for all employee sizes above
-    the minimum. [100,100001] will search for all companies with 100 or more
-    employees
-    """
+    group_operator: Literal["any", "all"]
 
     headquarters: Headquarters
-    """Headquarter locations supports all countries and US city/states.
-
-    State cannot be left blank if city is populated. Country cannot be other than
-    United States if searching for city/state.
-    """
 
     industry_classifications: IndustryClassifications
-    """Industry classification code for the company.
-
-    Pass the industry NAICS code or Grata's specific software industry code listed
-    in the mapping doc -
-    https://grata.stoplight.io/docs/grata/branches/v1.3/42ptq2xej8i5j-software-industry-code-mapping
-    """
+    """Industry classification codes."""
 
     is_funded: bool
-    """Indicates whether or not the company has received outside funding."""
+    """Indicates whether the company has received outside funding."""
 
     lists: Lists
-    """Grata list IDs to search within.
-
-    Default logic for include is "or", default logic for exclude is "and."
-    """
+    """Grata list IDs to search within."""
 
     ownership: List[
         Literal[
@@ -150,34 +107,31 @@ class SearchSimilarParams(TypedDict, total=False):
             "private_equity_add_on",
         ]
     ]
-    """Ownership types to search and sort on."""
 
     page_token: str
+    """Page token used for pagination."""
 
     terms_exclude: List[str]
-    """Keywords to exclude from the search."""
 
     terms_include: TermsInclude
-    """String used for keyword search. This is an array of keywords"""
 
     year_founded: Iterable[float]
-    """Range of founding years."""
 
 
 class HeadquartersExclude(TypedDict, total=False):
-    city: Optional[str]
+    city: str
 
     country: str
 
-    state: Optional[str]
+    state: str
 
 
 class HeadquartersInclude(TypedDict, total=False):
-    city: Optional[str]
+    city: str
 
     country: str
 
-    state: Optional[str]
+    state: str
 
 
 class Headquarters(TypedDict, total=False):
@@ -207,6 +161,4 @@ class TermsIncludeGroup(TypedDict, total=False):
 
 
 class TermsInclude(TypedDict, total=False):
-    group_operator: Literal["any", "all"]
-
     groups: Iterable[TermsIncludeGroup]
