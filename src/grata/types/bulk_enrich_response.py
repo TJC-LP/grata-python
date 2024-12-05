@@ -5,109 +5,46 @@ from datetime import date
 from typing_extensions import Literal, TypeAlias
 
 from .owner import Owner
+from .contact import Contact
 from .._models import BaseModel
+from .location import Location
+from .investors import Investors
+from .conference import Conference
+from .industry_classification import IndustryClassification
+from .software_industry_classification import SoftwareIndustryClassification
 
 __all__ = [
-    "EnrichmentBulkEnrichResponse",
+    "BulkEnrichResponse",
     "Company",
     "CompanyClassifications",
-    "CompanyClassificationsIndustryClassification",
-    "CompanyClassificationsSoftwareIndustry",
     "CompanyConferences",
-    "CompanyConferencesConference",
     "CompanyContacts",
-    "CompanyContactsContact",
     "CompanyDomain",
     "CompanyEmployeeLocationBreakdown",
     "CompanyEmployeesGrowth",
     "CompanyInvestors",
-    "CompanyInvestorsInvestors",
     "CompanyLocations",
-    "CompanyLocationsLocation",
-    "CompanyLocationsLocationGreaterRegion",
 ]
 
 
-class CompanyClassificationsIndustryClassification(BaseModel):
-    industry_code: str
-    """Industry code."""
-
-    industry_name: str
-    """Industry name."""
-
-
-class CompanyClassificationsSoftwareIndustry(BaseModel):
-    industry_code: str
-    """Software industry code."""
-
-    industry_name: str
-    """Software industry name."""
-
-
 class CompanyClassifications(BaseModel):
-    industry_classifications: List[CompanyClassificationsIndustryClassification]
+    industry_classifications: List[IndustryClassification]
     """Industry classifications for the company."""
 
-    software_industries: List[CompanyClassificationsSoftwareIndustry]
+    software_industries: List[SoftwareIndustryClassification]
     """Software industry classifications for the company."""
 
 
-class CompanyConferencesConference(BaseModel):
-    company_count: int
-    """Total count of companies attending the conference."""
-
-    end_date: date
-    """End date of the conference (YYYY-MM-DD)."""
-
-    location: str
-    """Location of the conference."""
-
-    name: str
-    """Name of the conference."""
-
-    start_date: date
-    """Start date of the conference (YYYY-MM-DD)."""
-
-    url: str
-    """Link to the conference."""
-
-
 class CompanyConferences(BaseModel):
-    conferences: List[CompanyConferencesConference]
+    conferences: List[Conference]
     """List of conferences."""
 
     count: int
     """Total count of all conferences."""
 
 
-class CompanyContactsContact(BaseModel):
-    name: str
-    """Name of the contact."""
-
-    title: str
-    """Title of the contact."""
-
-    work_email: str
-    """Work email of the contact."""
-
-    age: Optional[int] = None
-    """Age of contact."""
-
-    email_deliverability: Optional[str] = None
-    """Email Deliverability of the contact's email."""
-
-    socials_facebook: Optional[str] = None
-    """Link to the contact's Facebook page."""
-
-    socials_linkedin: Optional[str] = None
-    """Link to the contact's LinkedIn page."""
-
-    socials_twitter: Optional[str] = None
-    """Link to the contact's Twitter page."""
-
-
 class CompanyContacts(BaseModel):
-    contacts: List[CompanyContactsContact]
+    contacts: List[Contact]
     """List of contacts."""
 
     count: int
@@ -163,80 +100,11 @@ class CompanyEmployeesGrowth(BaseModel):
     """3 month growth rate as a percentage."""
 
 
-class CompanyInvestorsInvestors(BaseModel):
-    id: str
-    """Platform ID for the investor."""
-
-    domain: str
-    """Domain of the investor."""
-
-    name: str
-    """Name of the investor."""
-
-
-CompanyInvestors: TypeAlias = Union[str, CompanyInvestorsInvestors]
-
-
-class CompanyLocationsLocationGreaterRegion(BaseModel):
-    name: Optional[str] = None
-    """Name of the greater region."""
-
-
-class CompanyLocationsLocation(BaseModel):
-    city_name: str
-    """Name of the city of the location."""
-
-    country_iso2: str
-    """Two-digit country abbreviation."""
-
-    continent_name: Optional[str] = None
-    """Name of the continent of the location."""
-
-    country_iso3: Optional[str] = None
-    """Three-digit country abbreviation."""
-
-    country_name: Optional[str] = None
-    """Name of the country for the location."""
-
-    greater_regions: Optional[List[CompanyLocationsLocationGreaterRegion]] = None
-    """List of the greater regions encompassing the location."""
-
-    house_number: Optional[str] = None
-    """House number for the location."""
-
-    latitude: Optional[float] = None
-    """Latitude for the location."""
-
-    location_type: Optional[str] = None
-    """Indicates if the location is the HQ or location of business."""
-
-    longitude: Optional[float] = None
-    """Longitude for the location."""
-
-    macro_region: Optional[str] = None
-    """Macro region for the location."""
-
-    micro_region: Optional[str] = None
-    """Micro region for the location."""
-
-    postal_code: Optional[str] = None
-    """Postal code of location."""
-
-    raw_address: Optional[str] = None
-    """The location's full address."""
-
-    region_iso: Optional[str] = None
-    """Region abbreviation of the location."""
-
-    region_name: Optional[str] = None
-    """Name of the region for the location."""
-
-    street: Optional[str] = None
-    """Street name of the location."""
+CompanyInvestors: TypeAlias = Union[str, Investors]
 
 
 class CompanyLocations(BaseModel):
-    locations: List[CompanyLocationsLocation]
+    locations: List[Location]
     """List of locations."""
 
     total: int
@@ -471,7 +339,7 @@ class Company(BaseModel):
     """Founding year of the company."""
 
 
-class EnrichmentBulkEnrichResponse(BaseModel):
+class BulkEnrichResponse(BaseModel):
     companies: Optional[List[Company]] = None
 
     errors: Optional[List[str]] = None

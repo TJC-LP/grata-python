@@ -5,10 +5,10 @@ from typing import List as TypingList
 from .list import List as ListList
 from .._models import BaseModel
 
-__all__ = ["ListListResponse"]
+__all__ = ["SearchListResponse"]
 
 
-class ListListResponse(BaseModel):
+class SearchListResponse(BaseModel):
     count: int
     """Number of lists in the results."""
 

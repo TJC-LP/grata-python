@@ -8,10 +8,7 @@ from typing import Any, cast
 import pytest
 
 from grata import Grata, AsyncGrata
-from grata.types import (
-    SearchSearchResponse,
-    SearchSearchSimilarResponse,
-)
+from grata.types import SearchResponse, SimilarSearchResponse
 from tests.utils import assert_matches_type
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
@@ -23,7 +20,7 @@ class TestSearches:
     @parametrize
     def test_method_search(self, client: Grata) -> None:
         search = client.searches.search()
-        assert_matches_type(SearchSearchResponse, search, path=["response"])
+        assert_matches_type(SearchResponse, search, path=["response"])
 
     @parametrize
     def test_method_search_with_all_params(self, client: Grata) -> None:
@@ -76,7 +73,7 @@ class TestSearches:
             },
             year_founded=[1959],
         )
-        assert_matches_type(SearchSearchResponse, search, path=["response"])
+        assert_matches_type(SearchResponse, search, path=["response"])
 
     @parametrize
     def test_raw_response_search(self, client: Grata) -> None:
@@ -85,7 +82,7 @@ class TestSearches:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         search = response.parse()
-        assert_matches_type(SearchSearchResponse, search, path=["response"])
+        assert_matches_type(SearchResponse, search, path=["response"])
 
     @parametrize
     def test_streaming_response_search(self, client: Grata) -> None:
@@ -94,14 +91,14 @@ class TestSearches:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             search = response.parse()
-            assert_matches_type(SearchSearchResponse, search, path=["response"])
+            assert_matches_type(SearchResponse, search, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
     @parametrize
     def test_method_search_similar(self, client: Grata) -> None:
         search = client.searches.search_similar()
-        assert_matches_type(SearchSearchSimilarResponse, search, path=["response"])
+        assert_matches_type(SimilarSearchResponse, search, path=["response"])
 
     @parametrize
     def test_method_search_similar_with_all_params(self, client: Grata) -> None:
@@ -156,7 +153,7 @@ class TestSearches:
             },
             year_founded=[1959],
         )
-        assert_matches_type(SearchSearchSimilarResponse, search, path=["response"])
+        assert_matches_type(SimilarSearchResponse, search, path=["response"])
 
     @parametrize
     def test_raw_response_search_similar(self, client: Grata) -> None:
@@ -165,7 +162,7 @@ class TestSearches:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         search = response.parse()
-        assert_matches_type(SearchSearchSimilarResponse, search, path=["response"])
+        assert_matches_type(SimilarSearchResponse, search, path=["response"])
 
     @parametrize
     def test_streaming_response_search_similar(self, client: Grata) -> None:
@@ -174,7 +171,7 @@ class TestSearches:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             search = response.parse()
-            assert_matches_type(SearchSearchSimilarResponse, search, path=["response"])
+            assert_matches_type(SimilarSearchResponse, search, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -185,7 +182,7 @@ class TestAsyncSearches:
     @parametrize
     async def test_method_search(self, async_client: AsyncGrata) -> None:
         search = await async_client.searches.search()
-        assert_matches_type(SearchSearchResponse, search, path=["response"])
+        assert_matches_type(SearchResponse, search, path=["response"])
 
     @parametrize
     async def test_method_search_with_all_params(self, async_client: AsyncGrata) -> None:
@@ -238,7 +235,7 @@ class TestAsyncSearches:
             },
             year_founded=[1959],
         )
-        assert_matches_type(SearchSearchResponse, search, path=["response"])
+        assert_matches_type(SearchResponse, search, path=["response"])
 
     @parametrize
     async def test_raw_response_search(self, async_client: AsyncGrata) -> None:
@@ -247,7 +244,7 @@ class TestAsyncSearches:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         search = await response.parse()
-        assert_matches_type(SearchSearchResponse, search, path=["response"])
+        assert_matches_type(SearchResponse, search, path=["response"])
 
     @parametrize
     async def test_streaming_response_search(self, async_client: AsyncGrata) -> None:
@@ -256,14 +253,14 @@ class TestAsyncSearches:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             search = await response.parse()
-            assert_matches_type(SearchSearchResponse, search, path=["response"])
+            assert_matches_type(SearchResponse, search, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
     @parametrize
     async def test_method_search_similar(self, async_client: AsyncGrata) -> None:
         search = await async_client.searches.search_similar()
-        assert_matches_type(SearchSearchSimilarResponse, search, path=["response"])
+        assert_matches_type(SimilarSearchResponse, search, path=["response"])
 
     @parametrize
     async def test_method_search_similar_with_all_params(self, async_client: AsyncGrata) -> None:
@@ -318,7 +315,7 @@ class TestAsyncSearches:
             },
             year_founded=[1959],
         )
-        assert_matches_type(SearchSearchSimilarResponse, search, path=["response"])
+        assert_matches_type(SimilarSearchResponse, search, path=["response"])
 
     @parametrize
     async def test_raw_response_search_similar(self, async_client: AsyncGrata) -> None:
@@ -327,7 +324,7 @@ class TestAsyncSearches:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         search = await response.parse()
-        assert_matches_type(SearchSearchSimilarResponse, search, path=["response"])
+        assert_matches_type(SimilarSearchResponse, search, path=["response"])
 
     @parametrize
     async def test_streaming_response_search_similar(self, async_client: AsyncGrata) -> None:
@@ -336,6 +333,6 @@ class TestAsyncSearches:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             search = await response.parse()
-            assert_matches_type(SearchSearchSimilarResponse, search, path=["response"])
+            assert_matches_type(SimilarSearchResponse, search, path=["response"])
 
         assert cast(Any, response.is_closed) is True

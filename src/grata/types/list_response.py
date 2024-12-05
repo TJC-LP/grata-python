@@ -4,7 +4,7 @@ from typing import List
 
 from .._models import BaseModel
 
-__all__ = ["ListCompaniesResponse", "NotProcessed", "Processed", "Result", "ResultCompany"]
+__all__ = ["ListResponse", "NotProcessed", "Processed", "Result", "ResultCompany"]
 
 
 class NotProcessed(BaseModel):
@@ -39,7 +39,7 @@ class Result(BaseModel):
     """Indicates whether the domain was processed."""
 
 
-class ListCompaniesResponse(BaseModel):
+class ListResponse(BaseModel):
     not_processed: NotProcessed
 
     processed: Processed
