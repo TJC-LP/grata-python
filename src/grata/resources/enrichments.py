@@ -22,7 +22,7 @@ from .._response import (
 )
 from .._base_client import make_request_options
 from ..types.company import Company
-from ..types.enrichment_bulk_enrich_response import EnrichmentBulkEnrichResponse
+from ..types.bulk_enrich_response import BulkEnrichResponse
 
 __all__ = ["EnrichmentsResource", "AsyncEnrichmentsResource"]
 
@@ -58,7 +58,7 @@ class EnrichmentsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> EnrichmentBulkEnrichResponse:
+    ) -> BulkEnrichResponse:
         """
         Provide a set of up to 100 company domains or Grata-specific company IDs to
         return relevant firmographic data on requested companies.
@@ -88,7 +88,7 @@ class EnrichmentsResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=EnrichmentBulkEnrichResponse,
+            cast_to=BulkEnrichResponse,
         )
 
     def enrich(
@@ -168,7 +168,7 @@ class AsyncEnrichmentsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> EnrichmentBulkEnrichResponse:
+    ) -> BulkEnrichResponse:
         """
         Provide a set of up to 100 company domains or Grata-specific company IDs to
         return relevant firmographic data on requested companies.
@@ -198,7 +198,7 @@ class AsyncEnrichmentsResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=EnrichmentBulkEnrichResponse,
+            cast_to=BulkEnrichResponse,
         )
 
     async def enrich(

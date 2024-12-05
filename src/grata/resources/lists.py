@@ -23,8 +23,8 @@ from .._response import (
 )
 from ..types.list import List as TypesList
 from .._base_client import make_request_options
-from ..types.list_list_response import ListListResponse
-from ..types.list_companies_response import ListCompaniesResponse
+from ..types.list_response import ListResponse
+from ..types.search_list_response import SearchListResponse
 
 __all__ = ["ListsResource", "AsyncListsResource"]
 
@@ -167,7 +167,7 @@ class ListsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> ListListResponse:
+    ) -> SearchListResponse:
         """Search for and return details about the lists in your organization.
 
         Private
@@ -201,7 +201,7 @@ class ListsResource(SyncAPIResource):
                     list_list_params.ListListParams,
                 ),
             ),
-            cast_to=ListListResponse,
+            cast_to=SearchListResponse,
         )
 
     def delete(
@@ -251,7 +251,7 @@ class ListsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> ListCompaniesResponse:
+    ) -> ListResponse:
         """
         Allows users to add or remove companies from an existing list.
 
@@ -285,7 +285,7 @@ class ListsResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=ListCompaniesResponse,
+            cast_to=ListResponse,
         )
 
 
@@ -427,7 +427,7 @@ class AsyncListsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> ListListResponse:
+    ) -> SearchListResponse:
         """Search for and return details about the lists in your organization.
 
         Private
@@ -461,7 +461,7 @@ class AsyncListsResource(AsyncAPIResource):
                     list_list_params.ListListParams,
                 ),
             ),
-            cast_to=ListListResponse,
+            cast_to=SearchListResponse,
         )
 
     async def delete(
@@ -511,7 +511,7 @@ class AsyncListsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> ListCompaniesResponse:
+    ) -> ListResponse:
         """
         Allows users to add or remove companies from an existing list.
 
@@ -545,7 +545,7 @@ class AsyncListsResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=ListCompaniesResponse,
+            cast_to=ListResponse,
         )
 
 

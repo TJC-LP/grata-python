@@ -5,10 +5,10 @@ from typing import List
 from .company import Company
 from .._models import BaseModel
 
-__all__ = ["SearchSearchResponse"]
+__all__ = ["SearchResponse"]
 
 
-class SearchSearchResponse(BaseModel):
+class SearchResponse(BaseModel):
     companies: List[Company]
 
     count: int
