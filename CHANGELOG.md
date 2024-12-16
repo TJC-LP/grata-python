@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.1.3 (2024-12-16)
+
+Full Changelog: [v1.1.2...v1.1.3](https://github.com/TJC-LP/grata-python/compare/v1.1.2...v1.1.3)
+
+### Chores
+
+* **internal:** bump pydantic dependency ([#32](https://github.com/TJC-LP/grata-python/issues/32)) ([63d6237](https://github.com/TJC-LP/grata-python/commit/63d6237646cacb2b7cb61fbfe493b80a774d79fc))
+* **internal:** version bump ([#30](https://github.com/TJC-LP/grata-python/issues/30)) ([5245393](https://github.com/TJC-LP/grata-python/commit/52453939f843003bd58be304f3f4961c34a916b1))
+
+
+### Documentation
+
+* **readme:** fix http client proxies example ([#33](https://github.com/TJC-LP/grata-python/issues/33)) ([792ec5e](https://github.com/TJC-LP/grata-python/commit/792ec5ea4572dd20d1ea0b37b095f9aa0b6916c8))
+
 ## 1.1.2 (2024-12-05)
 
 Full Changelog: [v1.1.1...v1.1.2](https://github.com/TJC-LP/grata-python/compare/v1.1.1...v1.1.2)
